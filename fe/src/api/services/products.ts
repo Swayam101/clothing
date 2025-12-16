@@ -1,5 +1,6 @@
 import { apiClient } from '../config';
-import { API_ENDPOINTS } from '../constants';
+import { API_ENDPOINTS, USE_MOCK_DATA } from '../constants';
+import { getMockProductsResponse, getMockProductResponse } from '../mocks/products.mock';
 
 // Strapi API response types
 export interface StrapiImageFormat {
@@ -112,48 +113,65 @@ export const getProducts = async (params?: {
   sort?: string[];
   populate?: string | string[];
 }): Promise<StrapiProductsResponse> => {
-  const queryParams: Record<string, any> = {};
-
-  // Handle pagination
-  if (params?.pagination) {
-    if (params.pagination.page) queryParams['pagination[page]'] = params.pagination.page;
-    if (params.pagination.pageSize) queryParams['pagination[pageSize]'] = params.pagination.pageSize;
-    if (params.pagination.withCount !== undefined) queryParams['pagination[withCount]'] = params.pagination.withCount;
+  // Use mock data if enabled
+  if (USE_MOCK_DATA) {
+    console.log('🎭 Using mock data for products');
+    return new Promise((resolve) => {
+      // Simulate network delay
+      setTimeout(() => {
+        resolve(getMockProductsResponse(params));
+      }, 300);
+    });
   }
 
-  // Handle filters
-  if (params?.filters) {
-    Object.entries(params.filters).forEach(([key, value]) => {
-      if (typeof value === 'object' && value !== null) {
-        Object.entries(value).forEach(([operator, val]) => {
-          queryParams[`filters[${key}][${operator}]`] = val;
+  // Try API call, fallback to mock data on error
+  try {
+    const queryParams: Record<string, any> = {};
+
+    // Handle pagination
+    if (params?.pagination) {
+      if (params.pagination.page) queryParams['pagination[page]'] = params.pagination.page;
+      if (params.pagination.pageSize) queryParams['pagination[pageSize]'] = params.pagination.pageSize;
+      if (params.pagination.withCount !== undefined) queryParams['pagination[withCount]'] = params.pagination.withCount;
+    }
+
+    // Handle filters
+    if (params?.filters) {
+      Object.entries(params.filters).forEach(([key, value]) => {
+        if (typeof value === 'object' && value !== null) {
+          Object.entries(value).forEach(([operator, val]) => {
+            queryParams[`filters[${key}][${operator}]`] = val;
+          });
+        } else {
+          queryParams[`filters[${key}][$eq]`] = value;
+        }
+      });
+    }
+
+    // Handle sorting
+    if (params?.sort && params.sort.length > 0) {
+      params.sort.forEach((sortField, index) => {
+        queryParams[`sort[${index}]`] = sortField;
+      });
+    }
+
+    // Handle populate
+    if (params?.populate) {
+      if (Array.isArray(params.populate)) {
+        params.populate.forEach((field, index) => {
+          queryParams[`populate[${index}]`] = field;
         });
       } else {
-        queryParams[`filters[${key}][$eq]`] = value;
+        queryParams['populate'] = params.populate;
       }
-    });
-  }
-
-  // Handle sorting
-  if (params?.sort && params.sort.length > 0) {
-    params.sort.forEach((sortField, index) => {
-      queryParams[`sort[${index}]`] = sortField;
-    });
-  }
-
-  // Handle populate
-  if (params?.populate) {
-    if (Array.isArray(params.populate)) {
-      params.populate.forEach((field, index) => {
-        queryParams[`populate[${index}]`] = field;
-      });
-    } else {
-      queryParams['populate'] = params.populate;
     }
-  }
 
-  const response = await apiClient.get(API_ENDPOINTS.PRODUCTS, { params: queryParams });
-  return response.data;
+    const response = await apiClient.get(API_ENDPOINTS.PRODUCTS, { params: queryParams });
+    return response.data;
+  } catch (error) {
+    console.warn('⚠️ API call failed, falling back to mock data:', error);
+    return getMockProductsResponse(params);
+  }
 };
 
 // Get single product by documentId
@@ -163,19 +181,45 @@ export const getProduct = async (
     populate?: string | string[];
   }
 ): Promise<StrapiProductResponse> => {
-  const queryParams: Record<string, any> = {};
-
-  // Handle populate
-  if (params?.populate) {
-    if (Array.isArray(params.populate)) {
-      params.populate.forEach((field, index) => {
-        queryParams[`populate[${index}]`] = field;
-      });
-    } else {
-      queryParams['populate'] = params.populate;
-    }
+  // Use mock data if enabled
+  if (USE_MOCK_DATA) {
+    console.log('🎭 Using mock data for product:', documentId);
+    return new Promise((resolve, reject) => {
+      // Simulate network delay
+      setTimeout(() => {
+        const mockResponse = getMockProductResponse(documentId);
+        if (mockResponse) {
+          resolve(mockResponse);
+        } else {
+          reject(new Error(`Product with documentId "${documentId}" not found`));
+        }
+      }, 300);
+    });
   }
 
-  const response = await apiClient.get(`${API_ENDPOINTS.PRODUCTS}/${documentId}`, { params: queryParams });
-  return response.data;
+  // Try API call, fallback to mock data on error
+  try {
+    const queryParams: Record<string, any> = {};
+
+    // Handle populate
+    if (params?.populate) {
+      if (Array.isArray(params.populate)) {
+        params.populate.forEach((field, index) => {
+          queryParams[`populate[${index}]`] = field;
+        });
+      } else {
+        queryParams['populate'] = params.populate;
+      }
+    }
+
+    const response = await apiClient.get(`${API_ENDPOINTS.PRODUCTS}/${documentId}`, { params: queryParams });
+    return response.data;
+  } catch (error) {
+    console.warn('⚠️ API call failed, falling back to mock data for product:', documentId, error);
+    const mockResponse = getMockProductResponse(documentId);
+    if (mockResponse) {
+      return mockResponse;
+    }
+    throw error;
+  }
 };

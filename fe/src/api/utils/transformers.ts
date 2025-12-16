@@ -1,5 +1,21 @@
 import type { StrapiProduct } from '../services/products';
 import type { Product } from '../../types/product';
+import { API_BASE_URL } from '../constants';
+
+// Helper function to get full image URL
+const getImageUrl = (url: string): string => {
+  // If URL is already absolute (starts with http:// or https://), use as-is
+  // This handles external URLs like Unsplash (used in mock data)
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  
+  // If URL is relative (starts with /), prepend the API base URL
+  // This handles Strapi uploads like /uploads/image.jpg
+  // Remove '/api' from base URL since uploads are served from root
+  const baseUrl = API_BASE_URL.replace('/api', '');
+  return `${baseUrl}${url}`;
+};
 
 // Transform Strapi product to app Product interface
 export const transformStrapiProduct = (strapiProduct: StrapiProduct): Product => {
@@ -11,8 +27,7 @@ export const transformStrapiProduct = (strapiProduct: StrapiProduct): Product =>
 
   // Extract image URLs from Strapi image array
   const images = strapiProduct.image.map((img) => {
-    // Use the full URL with localhost:1337 prefix
-    return `http://localhost:1337${img.url}`;
+    return getImageUrl(img.url);
   });
 
   return {
