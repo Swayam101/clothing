@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface PaginationProps {
@@ -14,6 +14,8 @@ const Pagination: React.FC<PaginationProps> = ({
   onPageChange,
   className = '',
 }) => {
+  const [hoveredPage, setHoveredPage] = useState<number | null>(null);
+  
   if (totalPages <= 1) return null;
 
   const handlePrevious = () => {
@@ -97,16 +99,21 @@ const Pagination: React.FC<PaginationProps> = ({
 
           const pageNum = page as number;
           const isActive = pageNum === currentPage;
+          const isHovered = hoveredPage === pageNum;
 
           return (
             <button
               key={pageNum}
               onClick={() => handlePageClick(pageNum)}
-              className={`w-10 h-10 flex items-center justify-center border text-sm tracking-wide transition-colors ${
-                isActive
-                  ? 'bg-black text-white border-black'
-                  : 'border-gray-300 hover:border-black'
-              }`}
+              onMouseEnter={() => setHoveredPage(pageNum)}
+              onMouseLeave={() => setHoveredPage(null)}
+              className="w-10 h-10 flex items-center justify-center border text-sm tracking-wide"
+              style={{
+                backgroundColor: isActive || isHovered ? '#000000' : '#ffffff',
+                color: isActive || isHovered ? '#ffffff' : '#000000',
+                borderColor: isActive || isHovered ? '#000000' : '#d1d5db',
+                transition: 'all 0.3s ease',
+              }}
               aria-label={`Go to page ${pageNum}`}
               aria-current={isActive ? 'page' : undefined}
             >

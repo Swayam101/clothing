@@ -15,7 +15,7 @@ const createSlidesFromProducts = (products: Product[]): CarouselSlide[] => {
     image: product.images[0], // Use first image of each product
     alt: product.name,
     price: product.price,
-    label: 'Featured',
+    label: 'Thrifted',
   }));
 };
 
@@ -33,21 +33,21 @@ const HeroSection: React.FC<HeroSectionProps> = ({ featuredProducts }) => {
           <div className="flex flex-col gap-8 items-start">
             <div className="space-y-4">
               <div className="text-sm tracking-widest text-gray-500">
-                NEW COLLECTION
+                PRE-LOVED TREASURES ✨
               </div>
               <h1 className="text-6xl md:text-7xl font-light leading-tight">
-                Less is
+                Thrift
                 <br />
-                <span className="font-normal">More</span>
+                <span className="font-normal">Differently</span>
               </h1>
             </div>
             <p className="text-lg text-gray-600 leading-relaxed max-w-md">
-              Curated essentials designed with purpose. Quality over quantity,
-              always.
+              Handpicked vintage finds. Sustainable fashion with soul. 
+              Every piece tells a story.
             </p>
             <div className="flex gap-6 items-center">
               <Button to="/products" className="group">
-                EXPLORE NOW
+                SHOP THRIFTED GEMS
                 <ArrowRight
                   className="w-4 h-4 group-hover:translate-x-1 transition-transform"
                   strokeWidth={1.5}
@@ -69,7 +69,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ featuredProducts }) => {
                 />
               ) : (
                 <div className="flex items-center justify-center h-full">
-                  <p className="text-gray-400">No featured products</p>
+                  <p className="text-gray-400">No thrifted pieces yet</p>
                 </div>
               )}
             </div>
