@@ -19,10 +19,12 @@ const ContactMethodCard: React.FC<ContactMethodCardProps> = ({
   onClick,
   buttonVariant = 'primary',
 }) => {
+  const baseClasses = 'w-full py-3 text-sm tracking-wide transition-all duration-300 text-center cursor-pointer';
+  
   const buttonClasses =
     buttonVariant === 'primary'
-      ? 'w-full py-3 bg-black text-white text-sm tracking-wide hover:bg-gray-900 transition-all duration-300'
-      : 'block w-full py-3 border border-black text-sm tracking-wide hover:bg-black hover:text-white transition-all duration-300';
+      ? `${baseClasses} bg-black text-white hover:bg-gray-900`
+      : `${baseClasses} border border-black bg-white text-black hover:bg-black hover:text-white block`;
 
   return (
     <div className="border border-gray-200 p-8 text-center hover:border-black transition-colors">
@@ -48,7 +50,11 @@ const ContactMethodCard: React.FC<ContactMethodCardProps> = ({
           {buttonText}
         </a>
       ) : (
-        <button onClick={onClick} className={buttonClasses}>
+        <button 
+          onClick={onClick} 
+          className={buttonClasses}
+          type="button"
+        >
           {buttonText}
         </button>
       )}

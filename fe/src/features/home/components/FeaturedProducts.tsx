@@ -14,8 +14,8 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ products }) => {
   
       <Section background="gray" className='py-16 mb-12'>
       <SectionHeader
-        title="Featured Collection"
-        subtitle="Timeless pieces for the modern minimalist"
+        title="Thrifted Treasures"
+        subtitle="Handpicked pre-loved pieces with unique stories"
       />
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
@@ -29,7 +29,7 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ products }) => {
           to="/products"
           className="inline-block text-sm tracking-wide underline underline-offset-4 hover:no-underline transition"
         >
-          View All Products
+          Explore All Thrifted Finds
         </Link>
       </div>
     </Section>

@@ -17,13 +17,12 @@ const NewsletterSection: React.FC = () => {
     <Section background="gray" className="py-24">
       <div className="max-w-4xl mx-auto text-center space-y-8">
         <h2 className="text-5xl font-light leading-tight">
-          Join the Minimalist
+          Join the Thrift
           <br />
-          Movement
+          Community
         </h2>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Subscribe to receive exclusive access to new arrivals and curated
-          collections
+          Get first dibs on fresh thrifted drops and exclusive vintage finds ✨
         </p>
 
         {isSubscribed ? (

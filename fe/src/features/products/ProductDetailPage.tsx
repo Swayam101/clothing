@@ -2,7 +2,6 @@ import React, { useEffect, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useProducts, useProduct, transformStrapiProduct } from '../../api';
 import { useProductStore } from '../../store/useProductStore';
-import { openWhatsApp, getOrderMessage } from '../../utils/whatsapp';
 import { useConfig } from '../../context/ConfigContext';
 import ImageGallery from './components/ImageGallery';
 import ProductInfo from './components/ProductInfo';
@@ -103,18 +102,9 @@ const ProductDetailPage: React.FC = () => {
     );
   }
 
-  const handleWhatsAppOrder = () => {
-    if (!selectedSize) {
-      alert('Please select a size first');
-      return;
-    }
-    const message = getOrderMessage(product.name, selectedSize);
-    openWhatsApp(message);
-  };
-
   const handleInstagramOrder = () => {
     if (!selectedSize) {
-      alert('Please select a size first');
+      alert('Please select a size first to claim this thrifted piece!');
       return;
     }
     window.open(contact.instagramUrl, '_blank');
@@ -160,7 +150,6 @@ const ProductDetailPage: React.FC = () => {
 
               <OrderButtons
                 selectedSize={selectedSize}
-                onWhatsAppOrder={handleWhatsAppOrder}
                 onInstagramOrder={handleInstagramOrder}
               />
 

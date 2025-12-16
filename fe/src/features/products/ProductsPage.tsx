@@ -31,13 +31,13 @@ const ProductsPage: React.FC = () => {
     return (
       <Section>
         <SectionHeader
-          title="Our Collection"
-          subtitle="Explore our curated selection of essentials"
+          title="Thrift Shop"
+          subtitle="Discover unique pre-loved pieces, each with their own story"
         />
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
             <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-black border-r-transparent mb-4"></div>
-            <p className="text-gray-600">Loading products...</p>
+            <p className="text-gray-600">Finding thrifted treasures...</p>
           </div>
         </div>
       </Section>
@@ -65,11 +65,11 @@ const ProductsPage: React.FC = () => {
     return (
       <Section>
         <SectionHeader
-          title="Our Collection"
-          subtitle="Explore our curated selection of essentials"
+          title="Thrift Shop"
+          subtitle="Discover unique pre-loved pieces, each with their own story"
         />
         <div className="flex items-center justify-center py-20">
-          <p className="text-gray-600">No products available at the moment.</p>
+          <p className="text-gray-600">No thrifted pieces available at the moment. Check back soon!</p>
         </div>
       </Section>
     );
@@ -78,8 +78,8 @@ const ProductsPage: React.FC = () => {
   return (
     <Section>
       <SectionHeader
-        title="Our Collection"
-        subtitle="Explore our curated selection of essentials"
+        title="Thrift Shop"
+        subtitle="Discover unique pre-loved pieces, each with their own story"
       />
 
       {/* Products Grid */}

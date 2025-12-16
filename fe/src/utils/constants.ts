@@ -3,10 +3,10 @@
 // ============================================
 export const CONTACT_INFO = {
   // Phone & Social
-  whatsapp: '919876543210',
-  whatsappUrl: 'https://wa.me/919876543210',
-  instagram: 'yourbrand',
-  instagramUrl: 'https://instagram.com/yourbrand',
+  whatsapp: '918770075267',
+  whatsappUrl: 'https://wa.me/918770075267',
+  instagram: 'drift_nthrift',
+  instagramUrl: 'https://instagram.com/drift_nthrift',
   email: 'hello@yourbrand.com',
   
   // Brand
@@ -22,9 +22,9 @@ export const CONTACT_INFO = {
 // ============================================
 export const DELIVERY_INFO = {
   standardDelivery: '5-7 business days',
-  deliveryMessage: 'We deliver to all major cities across India',
+  deliveryMessage: 'We ship pre-loved treasures to all major cities across India',
   exchangePolicy: 'Easy size exchange within 7 days',
-  exchangePolicyDetailed: 'Just reach out to us within 7 days of receiving your order, and we will help you get the right fit.',
+  exchangePolicyDetailed: 'Just reach out to us within 7 days of receiving your thrifted piece, and we will help you get the right fit.',
 } as const;
 
 // ============================================
@@ -33,33 +33,39 @@ export const DELIVERY_INFO = {
 export const FAQS = [
   {
     id: 'how-to-order',
-    question: 'How do I place an order?',
+    question: 'How do I claim a thrifted piece?',
     answer:
-      'Simply browse our products, select your size, and click "Order via WhatsApp" or "Order via Instagram DM". We will guide you through the rest!',
+      'Simply browse our curated pre-loved collection, select your size, and DM us on Instagram. We will guide you through securing your treasure!',
+  },
+  {
+    id: 'condition',
+    question: 'What condition are the thrifted items in?',
+    answer:
+      'All our pieces are carefully handpicked, cleaned, and quality-checked. We only sell items in excellent to like-new condition. Each piece has its own unique character and story!',
   },
   {
     id: 'delivery-times',
     question: 'What are the delivery times?',
     answer:
-      'We typically deliver within 5-7 business days across India. We will provide tracking details once your order ships.',
+      'We typically ship within 2-3 days and deliver within 5-7 business days across India. Tracking details will be shared once your pre-loved piece is on its way!',
   },
   {
     id: 'exchange-policy',
     question: 'Can I exchange if the size does not fit?',
     answer:
-      'Yes! We offer size exchanges. Just reach out to us within 7 days of receiving your order, and we will help you get the right fit.',
+      'Yes! We offer size exchanges. Just reach out to us within 7 days of receiving your thrifted piece, and we will help you get the right fit.',
   },
   {
     id: 'payment-methods',
     question: 'What payment methods do you accept?',
     answer:
-      'We accept UPI, bank transfers, and cash on delivery (select locations). Payment details will be shared when you place your order.',
+      'We accept UPI, bank transfers, and cash on delivery (select locations). Payment details will be shared via Instagram DM when you claim your piece.',
   },
   {
-    id: 'shipping-coverage',
-    question: 'Do you ship across India?',
+    id: 'sustainability',
+    question: 'Why thrift?',
     answer:
-      'Yes! We deliver to all major cities and towns across India.',
+      'Thrifting is sustainable fashion! By giving pre-loved clothing a second life, you reduce waste, save resources, and create a unique style. Every thrifted piece is one-of-a-kind!',
   },
 ] as const;
 

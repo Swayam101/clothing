@@ -1,53 +1,40 @@
 import React from 'react';
+import { Instagram } from 'lucide-react';
 
 interface OrderButtonsProps {
   selectedSize: string;
-  onWhatsAppOrder: () => void;
   onInstagramOrder: () => void;
 }
 
 const OrderButtons: React.FC<OrderButtonsProps> = ({
   selectedSize,
-  onWhatsAppOrder,
   onInstagramOrder,
 }) => {
-  const handleOrder = (orderType: 'whatsapp' | 'instagram') => {
+  const handleOrder = () => {
     if (!selectedSize) {
-      alert('Please select a size first');
+      alert('Please select a size first to claim this thrifted piece!');
       return;
     }
-    
-    if (orderType === 'whatsapp') {
-      onWhatsAppOrder();
-    } else {
-      onInstagramOrder();
-    }
+    onInstagramOrder();
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <button
-        onClick={() => handleOrder('whatsapp')}
+        onClick={handleOrder}
         disabled={!selectedSize}
-        className={`w-full py-4 text-sm tracking-wide transition-all duration-300 ${
+        className={`w-full py-4 text-sm tracking-wide transition-all duration-300 flex items-center justify-center gap-2 ${
           selectedSize
             ? 'bg-black text-white hover:bg-gray-900'
             : 'bg-gray-200 text-gray-400 cursor-not-allowed'
         }`}
       >
-        ORDER VIA WHATSAPP
+        <Instagram size={18} strokeWidth={2} />
+        CLAIM VIA INSTAGRAM DM
       </button>
-      <button
-        onClick={() => handleOrder('instagram')}
-        disabled={!selectedSize}
-        className={`w-full py-4 border text-sm tracking-wide transition-all duration-300 ${
-          selectedSize
-            ? 'border-black hover:bg-black hover:text-white'
-            : 'border-gray-200 text-gray-400 cursor-not-allowed'
-        }`}
-      >
-        ORDER VIA INSTAGRAM
-      </button>
+      <p className="text-xs text-center text-gray-500">
+        DM us on Instagram to secure this pre-loved treasure ✨
+      </p>
     </div>
   );
 };

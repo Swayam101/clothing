@@ -49,7 +49,7 @@ const ContactPage: React.FC = () => {
               description="Fastest way to reach us"
               buttonText="CHAT NOW"
               onClick={handleWhatsAppClick}
-              buttonVariant="primary"
+              buttonVariant="secondary"
             />
 
             {/* Instagram */}

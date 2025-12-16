@@ -1,38 +1,38 @@
-import { Truck, RotateCcw, Shield } from 'lucide-react';
+import { Truck, RotateCcw, Sparkles } from 'lucide-react';
 
 export const mainFeatures = [
   {
+    icon: Sparkles,
+    title: 'Curated Pre-Loved',
+    description: 'Handpicked vintage & thrifted treasures',
+  },
+  {
     icon: Truck,
     title: 'Pan-India Delivery',
-    description: 'Fast shipping across India',
+    description: 'Sustainable fashion delivered anywhere',
   },
   {
     icon: RotateCcw,
     title: 'Size Exchange',
-    description: 'Easy size exchange available',
-  },
-  {
-    icon: Shield,
-    title: 'Premium Quality',
-    description: 'Finest fabrics & craftsmanship',
+    description: 'Easy exchange within 7 days',
   },
 ];
 
 export const benefits = [
   {
-    title: 'Premium Fabrics',
+    title: 'Sustainable Fashion',
     description:
-      'Only the finest materials make it into our collection. Every piece is crafted for comfort and durability.',
+      'Give pre-loved clothing a second life. Reduce waste, save resources, and create a unique style that is better for the planet.',
   },
   {
-    title: 'Perfect Fit',
+    title: 'One-of-a-Kind Pieces',
     description:
-      'Carefully designed sizing and multiple fit options ensure you find your perfect match every time.',
+      'Each thrifted item is unique with its own story. No two pieces are exactly alike—express your individuality with vintage finds.',
   },
   {
-    title: 'Timeless Design',
+    title: 'Quality Checked',
     description:
-      'Clean lines and classic styles that transcend trends. Built to last seasons, not weeks.',
+      'Every piece is carefully inspected, cleaned, and curated. We only sell items in excellent to like-new condition.',
   },
 ];
 
