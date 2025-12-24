@@ -1,6 +1,8 @@
+'use client';
+
 import React from 'react';
 import { Instagram, Mail } from 'lucide-react';
-import { useConfig } from '../../context/ConfigContext';
+import { useConfig } from '@/context/ConfigContext';
 
 const Footer: React.FC = () => {
   const { contact } = useConfig();
@@ -11,7 +13,9 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
         <div className="flex flex-col items-center space-y-6">
           {/* Brand Name */}
-          <div className="text-2xl font-light tracking-widest">{contact.brandName}</div>
+          <div className="text-2xl font-light tracking-widest">
+            {contact.brandName}
+          </div>
 
           {/* Social Links */}
           <div className="flex space-x-6">
@@ -65,4 +69,3 @@ const Footer: React.FC = () => {
 };
 
 export default Footer;
-

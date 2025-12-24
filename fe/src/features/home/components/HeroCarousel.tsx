@@ -1,4 +1,7 @@
+'use client';
+
 import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export interface CarouselSlide {
@@ -50,7 +53,9 @@ const HeroCarousel = ({
   if (!slides.length) return null;
 
   return (
-    <div className={`relative w-full h-full overflow-hidden group ${className}`}>
+    <div
+      className={`relative w-full h-full overflow-hidden group ${className}`}
+    >
       {/* Slides */}
       <div className="relative w-full h-full">
         {slides.map((slide, index) => (
@@ -60,18 +65,25 @@ const HeroCarousel = ({
               index === current ? 'opacity-100 z-10' : 'opacity-0 z-0'
             }`}
           >
-            <img
+            <Image
               src={slide.image}
               alt={slide.alt || `Slide ${index + 1}`}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority={index === 0}
             />
-            
+
             {/* Floating Price Badge */}
             {showPrice && slide.price && (
               <div className="absolute bottom-6 right-6 bg-white border border-gray-200 px-5 py-3 shadow-lg z-20">
-                <div className="text-2xl font-light tracking-tight">₹{slide.price.toLocaleString()}</div>
+                <div className="text-2xl font-light tracking-tight">
+                  ₹{slide.price.toLocaleString()}
+                </div>
                 {slide.label && (
-                  <div className="text-xs text-gray-500 tracking-wide mt-0.5">{slide.label}</div>
+                  <div className="text-xs text-gray-500 tracking-wide mt-0.5">
+                    {slide.label}
+                  </div>
                 )}
               </div>
             )}

@@ -1,5 +1,12 @@
+'use client';
+
 import React, { createContext, useContext } from 'react';
-import { CONTACT_INFO, DELIVERY_INFO, FAQS, WHATSAPP_MESSAGES } from '../utils/constants';
+import {
+  CONTACT_INFO,
+  DELIVERY_INFO,
+  FAQS,
+  WHATSAPP_MESSAGES,
+} from '@/utils/constants';
 
 interface ConfigContextType {
   contact: typeof CONTACT_INFO;
@@ -32,4 +39,3 @@ export const useConfig = () => {
   }
   return context;
 };
-

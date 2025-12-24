@@ -1,7 +1,9 @@
+'use client';
+
 import React, { useMemo } from 'react';
 import { ArrowRight } from 'lucide-react';
-import Button from '../../../shared/components/ui/Button';
-import type { Product } from '../../../types/product';
+import Button from '@/shared/components/ui/Button';
+import type { Product } from '@/types/api';
 import HeroCarousel, { type CarouselSlide } from './HeroCarousel';
 
 interface HeroSectionProps {
@@ -11,9 +13,9 @@ interface HeroSectionProps {
 // Convert featured products to carousel slides (one slide per product)
 const createSlidesFromProducts = (products: Product[]): CarouselSlide[] => {
   return products.map((product) => ({
-    id: product.id,
-    image: product.images[0], // Use first image of each product
-    alt: product.name,
+    id: product._id,
+    image: product.image, // Use product image
+    alt: product.title,
     price: product.price,
     label: 'Thrifted',
   }));
@@ -42,8 +44,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ featuredProducts }) => {
               </h1>
             </div>
             <p className="text-lg text-gray-600 leading-relaxed max-w-md">
-              Handpicked vintage finds. Sustainable fashion with soul. 
-              Every piece tells a story.
+              Handpicked vintage finds. Sustainable fashion with soul. Every
+              piece tells a story.
             </p>
             <div className="flex gap-6 items-center">
               <Button to="/products" className="group">

@@ -1,52 +1,38 @@
 # Clothing E-Commerce Frontend
 
-A modern e-commerce frontend built with React, TypeScript, and Vite, featuring Strapi CMS integration with mock data support for client demos.
+A modern thrift store e-commerce frontend built with React, TypeScript, and Vite, featuring authentication and payment integration.
 
 ## 🚀 Quick Start
 
-### Development with Mock Data (No Backend Required)
-
-Perfect for client demos and UI development:
+### Development Setup
 
 ```bash
 # Install dependencies
 yarn install
 
-# The project is already configured to use mock data by default
-# Just start the dev server
+# Create .env file
+echo "VITE_API_BASE_URL=http://localhost:3000/api" > .env
+
+# Start the dev server
 yarn dev
 ```
 
-The app will run at `http://localhost:5173` with 16 pre-populated mock products!
+The app will run at `http://localhost:5173`
 
-### Development with Real API
-
-```bash
-# Create .env file (if not exists)
-echo "VITE_USE_MOCK_DATA=false" > .env
-echo "VITE_API_BASE_URL=http://localhost:1337/api" >> .env
-
-# Start your Strapi backend first (on port 1337)
-# Then start the dev server
-yarn dev
-```
-
-## 📚 Documentation
-
-- **[Mock Data Setup Guide](./MOCK_DATA_SETUP.md)** - Complete guide on using mock data
-- **[API Integration](./src/api/README.md)** - API documentation (if available)
+**Note:** You need to have the backend API running on `http://localhost:3000` for full functionality.
 
 ## ✨ Features
 
 - 🛍️ Product listing with pagination
 - 🔍 Product detail pages with image galleries
+- 🔐 **User Authentication** (Login/Register with JWT)
 - 📱 Responsive design (mobile-first)
-- 💬 WhatsApp/Instagram order integration
-- 🎭 **Mock data support** - Works without backend!
+- 💬 Instagram order integration
 - 🚀 React 19 with React Compiler
 - 🎨 TailwindCSS + DaisyUI for styling
-- 📦 Zustand for state management
+- 📦 Zustand for state management (including auth state)
 - 🔄 TanStack Query for data fetching
+- 💳 Cashfree payment integration ready
 
 ## 🛠️ Tech Stack
 
@@ -55,7 +41,7 @@ yarn dev
 - **TailwindCSS 4.1.18** for styling
 - **React Router DOM 7.10.1** for routing
 - **TanStack Query 5.90.12** for server state
-- **Zustand 5.0.9** for client state
+- **Zustand 5.0.9** for client state (+ persist middleware for auth)
 - **Axios 1.13.2** for API calls
 
 ## 📝 Available Scripts
@@ -67,26 +53,74 @@ yarn preview  # Preview production build
 yarn lint     # Run ESLint
 ```
 
-## 🎭 Mock Data vs Real API
+## 🔐 Authentication
 
-The app intelligently switches between mock data and real API:
+The app uses **Firebase Authentication** with social sign-in:
 
-| Mode | Environment Variable | Use Case |
-|------|---------------------|----------|
-| Mock Data | `VITE_USE_MOCK_DATA=true` | Client demos, development without backend |
-| Real API | `VITE_USE_MOCK_DATA=false` | Production, full backend integration |
-| Auto-Fallback | Any setting | If API fails, automatically uses mock data |
+- **🔥 Firebase Authentication** - Google and Facebook sign-in
+- **No Passwords** - Secure OAuth 2.0 flow handled by Firebase
+- **Persistent Sessions** - JWT tokens stored in localStorage via Zustand persist
+- **Auto Token Injection** - Axios interceptor automatically adds JWT to requests
+- **Auto Logout** - 401 responses trigger automatic logout and redirect
+- **Seamless UX** - One-click sign-in with existing social accounts
+
+### Quick Setup
+
+See [FIREBASE_SETUP.md](./FIREBASE_SETUP.md) for complete Firebase configuration instructions.
+
+### Auth State Management
+
+Auth state is managed with Zustand and persisted to localStorage:
+
+```typescript
+import { useFirebaseAuth } from './hooks/useFirebaseAuth';
+
+const { user, isAuthenticated, signInWithGoogle, signOut } = useFirebaseAuth();
+```
+
+### Using Auth in Components
+
+```typescript
+import { useAuthStore } from '../store/useAuthStore';
+
+const MyComponent = () => {
+  const { isAuthenticated, user } = useAuthStore();
+  
+  if (!isAuthenticated) {
+    return <p>Please sign in</p>;
+  }
+  
+  return <p>Welcome, {user?.name}!</p>;
+};
+```
 
 ## 📁 Project Structure
 
 ```
 src/
-├── api/              # API layer (services, hooks, mocks)
+├── api/              # API layer (services, hooks, config)
+│   ├── services/     # API service functions (auth, products, orders)
+│   ├── hooks/        # React Query hooks (useProducts, useOrders)
+│   └── config.ts     # Axios instance with JWT interceptor
+├── config/           # App configuration
+│   └── firebase.ts   # Firebase initialization
+├── hooks/            # Custom React hooks
+│   └── useFirebaseAuth.ts  # Firebase auth hook
 ├── features/         # Feature modules (pages + components)
+│   ├── auth/         # Authentication pages (LoginPage)
+│   ├── products/     # Product pages
+│   ├── home/         # Homepage
+│   └── ...
 ├── shared/           # Reusable UI components
 ├── layouts/          # Layout wrappers
 ├── store/            # Zustand state stores
+│   ├── useAuthStore.ts    # Auth state (user, token, persisted)
+│   ├── useProductStore.ts # Product selection state
+│   └── useUIStore.ts      # UI state (mobile menu, etc.)
 ├── types/            # TypeScript interfaces
+│   ├── auth.ts       # Auth & User types
+│   ├── api.ts        # Product types
+│   └── order.ts      # Order & Payment types
 ├── utils/            # Helper functions
 └── context/          # React contexts
 ```
@@ -96,41 +130,52 @@ src/
 Create a `.env` file:
 
 ```env
-# API Configuration
-VITE_API_BASE_URL=http://localhost:1337/api
+# Backend API
+VITE_API_BASE_URL=http://localhost:3000/api
 
-# Mock Data Toggle
-VITE_USE_MOCK_DATA=true
+# Firebase Configuration
+VITE_FIREBASE_API_KEY=your_firebase_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your-app.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your-project-id
+VITE_FIREBASE_STORAGE_BUCKET=your-app.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
 ```
 
-See `.env.example` for all options.
+**Get Firebase credentials:** Follow [FIREBASE_SETUP.md](./FIREBASE_SETUP.md)
 
 ## 🎨 Customization
 
-### Adding Mock Products
-
-Edit `src/api/mocks/products.mock.ts` to add/modify mock products.
-
 ### Updating Brand Info
 
-Edit `src/utils/constants.ts` for contact info, FAQs, and WhatsApp messages.
+Edit `src/utils/constants.ts` for contact info, FAQs, and delivery information.
+
+### Firebase Configuration
+
+See [FIREBASE_SETUP.md](./FIREBASE_SETUP.md) for enabling additional auth providers.
 
 ## 📦 Building for Production
 
 ```bash
-# Build with real API
-VITE_USE_MOCK_DATA=false yarn build
+# Build for production
+yarn build
 
-# Build with mock data (for demo sites)
-VITE_USE_MOCK_DATA=true yarn build
+# Preview production build
+yarn preview
 ```
+
+**Important:** Make sure to:
+1. Update `.env` with production API URL
+2. Add production domain to Firebase authorized domains
+3. Configure CORS on backend for production domain
 
 ## 🤝 Contributing
 
 1. Create a feature branch
 2. Make your changes
-3. Test with both mock and real API
-4. Submit a pull request
+3. Test authentication flow
+4. Run linter: `yarn lint`
+5. Submit a pull request
 
 ---
 

@@ -1,5 +1,7 @@
+'use client';
+
 import { create } from 'zustand';
-import type { Product } from '../types/product';
+import type { Product } from '@/types/product';
 
 interface ProductState {
   selectedProduct: Product | null;
@@ -16,4 +18,3 @@ export const useProductStore = create<ProductState>((set) => ({
   setSelectedSize: (size) => set({ selectedSize: size }),
   resetSelection: () => set({ selectedProduct: null, selectedSize: '' }),
 }));
-

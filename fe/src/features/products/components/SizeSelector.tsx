@@ -1,5 +1,7 @@
+'use client';
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 interface SizeSelectorProps {
   sizes: string[];
@@ -17,7 +19,7 @@ const SizeSelector: React.FC<SizeSelectorProps> = ({
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm tracking-wide font-medium">SELECT SIZE *</h3>
         <Link
-          to="/size-guide"
+          href="/size-guide"
           className="text-sm underline underline-offset-4 hover:no-underline transition"
         >
           Size Guide
@@ -43,4 +45,3 @@ const SizeSelector: React.FC<SizeSelectorProps> = ({
 };
 
 export default SizeSelector;
-

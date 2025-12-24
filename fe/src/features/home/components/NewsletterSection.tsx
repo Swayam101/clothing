@@ -1,8 +1,10 @@
+'use client';
+
 import React from 'react';
-import Section from '../../../shared/components/ui/Section';
-import Input from '../../../shared/components/ui/Input';
-import Button from '../../../shared/components/ui/Button';
-import { useNewsletterStore } from '../../../store/useNewsletterStore';
+import Section from '@/shared/components/ui/Section';
+import Input from '@/shared/components/ui/Input';
+import Button from '@/shared/components/ui/Button';
+import { useNewsletterStore } from '@/store/useNewsletterStore';
 
 const NewsletterSection: React.FC = () => {
   const { email, isSubscribed, isLoading, error, setEmail, subscribe } =
@@ -43,15 +45,17 @@ const NewsletterSection: React.FC = () => {
               onChange={(e) => setEmail(e.target.value)}
               className="flex-1"
             />
-            <Button type="submit" disabled={isLoading} className="whitespace-nowrap">
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="whitespace-nowrap"
+            >
               {isLoading ? 'SUBSCRIBING...' : 'SUBSCRIBE'}
             </Button>
           </form>
         )}
 
-        {error && (
-          <p className="text-sm text-red-600">{error}</p>
-        )}
+        {error && <p className="text-sm text-red-600">{error}</p>}
       </div>
     </Section>
   );

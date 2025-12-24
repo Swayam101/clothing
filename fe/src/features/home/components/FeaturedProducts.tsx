@@ -1,9 +1,11 @@
+'use client';
+
 import React from 'react';
-import { Link } from 'react-router-dom';
-import Section from '../../../shared/components/ui/Section';
-import SectionHeader from '../../../shared/components/ui/SectionHeader';
-import ProductCard from '../../../shared/components/ProductCard';
-import type { Product } from '../../../types/product';
+import Link from 'next/link';
+import Section from '@/shared/components/ui/Section';
+import SectionHeader from '@/shared/components/ui/SectionHeader';
+import ProductCard from '@/shared/components/ProductCard';
+import type { Product } from '@/types/api';
 
 interface FeaturedProductsProps {
   products: Product[];
@@ -11,8 +13,7 @@ interface FeaturedProductsProps {
 
 const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ products }) => {
   return (
-  
-      <Section background="gray" className='py-16 mb-12'>
+    <Section background="gray" className="py-16 mb-12">
       <SectionHeader
         title="Thrifted Treasures"
         subtitle="Handpicked pre-loved pieces with unique stories"
@@ -20,22 +21,20 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({ products }) => {
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard key={product._id} product={product} />
         ))}
       </div>
 
       <div className="text-center mt-12">
         <Link
-          to="/products"
+          href="/products"
           className="inline-block text-sm tracking-wide underline underline-offset-4 hover:no-underline transition"
         >
           Explore All Thrifted Finds
         </Link>
       </div>
     </Section>
- 
   );
 };
 
 export default FeaturedProducts;
-

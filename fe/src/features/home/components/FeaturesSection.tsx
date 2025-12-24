@@ -1,6 +1,8 @@
+'use client';
+
 import React from 'react';
-import FeatureCard from '../../../shared/components/ui/FeatureCard';
-import { mainFeatures } from '../../../data/features';
+import FeatureCard from '@/shared/components/ui/FeatureCard';
+import { mainFeatures } from '@/data/features';
 
 const FeaturesSection: React.FC = () => {
   return (
@@ -18,4 +20,3 @@ const FeaturesSection: React.FC = () => {
 };
 
 export default FeaturesSection;
-

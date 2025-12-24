@@ -1,5 +1,7 @@
+'use client';
+
 import React from 'react';
-import { openWhatsApp, getContactMessage } from '../../utils/whatsapp';
+import { openWhatsApp, getContactMessage } from '@/utils/whatsapp';
 
 const StickyWhatsApp: React.FC = () => {
   const handleWhatsAppClick = () => {
@@ -30,4 +32,3 @@ const StickyWhatsApp: React.FC = () => {
 };
 
 export default StickyWhatsApp;
-

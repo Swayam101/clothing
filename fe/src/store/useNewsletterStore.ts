@@ -1,3 +1,5 @@
+'use client';
+
 import { create } from 'zustand';
 
 interface NewsletterState {
@@ -18,7 +20,7 @@ export const useNewsletterStore = create<NewsletterState>((set, get) => ({
   setEmail: (email) => set({ email }),
   subscribe: async () => {
     const { email } = get();
-    
+
     if (!email || !email.includes('@')) {
       set({ error: 'Please enter a valid email address' });
       return;
@@ -39,6 +41,6 @@ export const useNewsletterStore = create<NewsletterState>((set, get) => ({
       set({ isSubscribed: false });
     }, 3000);
   },
-  reset: () => set({ email: '', isSubscribed: false, error: null, isLoading: false }),
+  reset: () =>
+    set({ email: '', isSubscribed: false, error: null, isLoading: false }),
 }));
-

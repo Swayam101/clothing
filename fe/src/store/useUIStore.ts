@@ -1,3 +1,5 @@
+'use client';
+
 import { create } from 'zustand';
 
 interface UIState {
@@ -18,4 +20,3 @@ export const useUIStore = create<UIState>((set) => ({
   openNewsletterModal: () => set({ isNewsletterModalOpen: true }),
   closeNewsletterModal: () => set({ isNewsletterModalOpen: false }),
 }));
-

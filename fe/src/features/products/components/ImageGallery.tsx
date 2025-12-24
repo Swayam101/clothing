@@ -1,4 +1,7 @@
+'use client';
+
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface ImageGalleryProps {
@@ -25,10 +28,13 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, productName }) => {
     <div>
       {/* Main Image with Navigation */}
       <div className="relative aspect-square bg-gray-100 overflow-hidden mb-4">
-        <img
+        <Image
           src={images[currentImageIndex]}
           alt={`${productName} - Image ${currentImageIndex + 1}`}
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          priority
         />
 
         {images.length > 1 && (
@@ -73,16 +79,18 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, productName }) => {
           <button
             key={index}
             onClick={() => setCurrentImageIndex(index)}
-            className={`aspect-square bg-gray-100 overflow-hidden border transition-all ${
+            className={`relative aspect-square bg-gray-100 overflow-hidden border transition-all ${
               index === currentImageIndex
                 ? 'border-black'
                 : 'border-transparent hover:border-gray-300'
             }`}
           >
-            <img
+            <Image
               src={image}
               alt={`${productName} thumbnail ${index + 1}`}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 25vw, 12vw"
             />
           </button>
         ))}
@@ -92,4 +100,3 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, productName }) => {
 };
 
 export default ImageGallery;
-

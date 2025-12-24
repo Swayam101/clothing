@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Instagram } from 'lucide-react';
 
@@ -40,4 +42,3 @@ const OrderButtons: React.FC<OrderButtonsProps> = ({
 };
 
 export default OrderButtons;
-

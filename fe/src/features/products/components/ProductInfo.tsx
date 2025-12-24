@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 interface ProductInfoProps {
@@ -48,4 +50,3 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
 };
 
 export default ProductInfo;
-
