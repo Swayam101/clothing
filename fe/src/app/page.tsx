@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import HeroSection from '@/features/home/components/HeroSection';
 import FeaturesSection from '@/features/home/components/FeaturesSection';
 import FeaturedProducts from '@/features/home/components/FeaturedProducts';
 import BenefitsSection from '@/features/home/components/BenefitsSection';
 import NewsletterSection from '@/features/home/components/NewsletterSection';
+import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
+import EmptyState from '@/shared/components/ui/EmptyState';
 import { useProducts } from '@/api';
 
 export default function HomePage() {
@@ -28,16 +30,13 @@ export default function HomePage() {
       {/* Hero Section with featured products carousel */}
       {isLoading ? (
         <div className="pb-20 flex items-center justify-center min-h-[600px]">
-          <div className="text-center">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-black border-r-transparent mb-4"></div>
-            <p className="text-gray-600">Loading...</p>
-          </div>
+          <LoadingSpinner message="Loading..." />
         </div>
       ) : featuredProducts.length > 0 ? (
         <HeroSection featuredProducts={featuredProducts} />
       ) : (
         <div className="pb-20 flex items-center justify-center min-h-[600px]">
-          <p className="text-gray-600">No thrifted pieces yet</p>
+          <EmptyState message="No thrifted pieces yet" />
         </div>
       )}
 
@@ -49,8 +48,8 @@ export default function HomePage() {
 
       {/* Featured Products Section */}
       {isLoading ? (
-        <div className="py-20 text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-black border-r-transparent"></div>
+        <div className="py-20 flex justify-center">
+          <LoadingSpinner />
         </div>
       ) : (
         <FeaturedProducts products={featuredProducts} />

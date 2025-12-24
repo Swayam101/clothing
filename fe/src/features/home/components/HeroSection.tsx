@@ -5,6 +5,7 @@ import { ArrowRight } from 'lucide-react';
 import Button from '@/shared/components/ui/Button';
 import type { Product } from '@/types/api';
 import HeroCarousel, { type CarouselSlide } from './HeroCarousel';
+import { HOME_HERO } from '@/data/content/pages/home';
 
 interface HeroSectionProps {
   featuredProducts: Product[];
@@ -14,10 +15,10 @@ interface HeroSectionProps {
 const createSlidesFromProducts = (products: Product[]): CarouselSlide[] => {
   return products.map((product) => ({
     id: product._id,
-    image: product.image, // Use product image
+    image: product.image,
     alt: product.title,
     price: product.price,
-    label: 'Thrifted',
+    label: HOME_HERO.carouselLabel,
   }));
 };
 
@@ -35,21 +36,20 @@ const HeroSection: React.FC<HeroSectionProps> = ({ featuredProducts }) => {
           <div className="flex flex-col gap-8 items-start">
             <div className="space-y-4">
               <div className="text-sm tracking-widest text-gray-500">
-                PRE-LOVED TREASURES ✨
+                {HOME_HERO.badge}
               </div>
               <h1 className="text-6xl md:text-7xl font-light leading-tight">
-                Thrift
+                {HOME_HERO.titleLine1}
                 <br />
-                <span className="font-normal">Differently</span>
+                <span className="font-normal">{HOME_HERO.titleLine2}</span>
               </h1>
             </div>
             <p className="text-lg text-gray-600 leading-relaxed max-w-md">
-              Handpicked vintage finds. Sustainable fashion with soul. Every
-              piece tells a story.
+              {HOME_HERO.subtitle}
             </p>
             <div className="flex gap-6 items-center">
-              <Button to="/products" className="group">
-                SHOP THRIFTED GEMS
+              <Button to={HOME_HERO.ctaHref} className="group">
+                {HOME_HERO.ctaText}
                 <ArrowRight
                   className="w-4 h-4 group-hover:translate-x-1 transition-transform"
                   strokeWidth={1.5}
@@ -71,7 +71,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ featuredProducts }) => {
                 />
               ) : (
                 <div className="flex items-center justify-center h-full">
-                  <p className="text-gray-400">No thrifted pieces yet</p>
+                  <p className="text-gray-400">{HOME_HERO.emptyMessage}</p>
                 </div>
               )}
             </div>

@@ -1,12 +1,13 @@
 'use client';
 
-import React from 'react';
 import { Instagram, Mail } from 'lucide-react';
 import { useConfig } from '@/context/ConfigContext';
 import { openWhatsApp, getContactMessage } from '@/utils/whatsapp';
 import ContactMethodCard from '@/features/contact/components/ContactMethodCard';
 import FAQItem from '@/features/contact/components/FAQItem';
 import ResponseTimeCard from '@/features/contact/components/ResponseTimeCard';
+import WhatsAppIcon from '@/shared/components/icons/WhatsAppIcon';
+import { CONTACT_PAGE } from '@/data/content/pages/contact';
 
 export default function ContactPage() {
   const { contact, faqs } = useConfig();
@@ -22,9 +23,9 @@ export default function ContactPage() {
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="text-center mb-16">
-            <h1 className="text-5xl font-light mb-4">Get in Touch</h1>
+            <h1 className="text-5xl font-light mb-4">{CONTACT_PAGE.header.title}</h1>
             <p className="text-gray-600 text-lg">
-              Have questions? We&apos;re here to help
+              {CONTACT_PAGE.header.subtitle}
             </p>
           </div>
 
@@ -32,24 +33,10 @@ export default function ContactPage() {
           <div className="grid md:grid-cols-3 gap-8 mb-20">
             {/* WhatsApp */}
             <ContactMethodCard
-              icon={
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="28"
-                  height="28"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-                </svg>
-              }
-              title="WHATSAPP"
-              description="Fastest way to reach us"
-              buttonText="CHAT NOW"
+              icon={<WhatsAppIcon size={28} />}
+              title={CONTACT_PAGE.methods.whatsapp.title}
+              description={CONTACT_PAGE.methods.whatsapp.description}
+              buttonText={CONTACT_PAGE.methods.whatsapp.buttonText}
               onClick={handleWhatsAppClick}
               buttonVariant="secondary"
             />
@@ -57,9 +44,9 @@ export default function ContactPage() {
             {/* Instagram */}
             <ContactMethodCard
               icon={<Instagram className="w-7 h-7" strokeWidth={1.5} />}
-              title="INSTAGRAM"
-              description="DM us or check our stories"
-              buttonText="FOLLOW US"
+              title={CONTACT_PAGE.methods.instagram.title}
+              description={CONTACT_PAGE.methods.instagram.description}
+              buttonText={CONTACT_PAGE.methods.instagram.buttonText}
               buttonHref={contact.instagramUrl}
               buttonVariant="secondary"
             />
@@ -67,9 +54,9 @@ export default function ContactPage() {
             {/* Email */}
             <ContactMethodCard
               icon={<Mail className="w-7 h-7" strokeWidth={1.5} />}
-              title="EMAIL"
-              description="For detailed inquiries"
-              buttonText="SEND EMAIL"
+              title={CONTACT_PAGE.methods.email.title}
+              description={CONTACT_PAGE.methods.email.description}
+              buttonText={CONTACT_PAGE.methods.email.buttonText}
               buttonHref={`mailto:${contact.email}`}
               buttonVariant="secondary"
             />
@@ -78,7 +65,7 @@ export default function ContactPage() {
           {/* FAQ Section */}
           <div className="border-t border-gray-200 pt-16">
             <h2 className="text-3xl font-light mb-12 text-center tracking-wide">
-              FREQUENTLY ASKED QUESTIONS
+              {CONTACT_PAGE.faq.title}
             </h2>
             <div className="space-y-8">
               {faqs.map((faq) => (
@@ -95,6 +82,8 @@ export default function ContactPage() {
           <ResponseTimeCard
             responseTime={contact.responseTime}
             businessHours={contact.businessHours}
+            title={CONTACT_PAGE.responseTime.title}
+            description={CONTACT_PAGE.responseTime.description}
           />
         </div>
       </div>

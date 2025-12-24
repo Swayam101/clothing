@@ -2,15 +2,18 @@
 
 import React, { createContext, useContext } from 'react';
 import {
+  SITE_CONFIG,
   CONTACT_INFO,
   DELIVERY_INFO,
-  FAQS,
-  WHATSAPP_MESSAGES,
-} from '@/utils/constants';
+  PAYMENT_INFO,
+} from '@/data/content/site';
+import { FAQS, WHATSAPP_MESSAGES } from '@/data/content/pages/contact';
 
 interface ConfigContextType {
-  contact: typeof CONTACT_INFO;
+  site: typeof SITE_CONFIG;
+  contact: typeof CONTACT_INFO & { brandName: string };
   delivery: typeof DELIVERY_INFO;
+  payment: typeof PAYMENT_INFO;
   faqs: typeof FAQS;
   whatsappMessages: typeof WHATSAPP_MESSAGES;
 }
@@ -20,9 +23,14 @@ const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
 export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const value = {
-    contact: CONTACT_INFO,
+  const value: ConfigContextType = {
+    site: SITE_CONFIG,
+    contact: {
+      ...CONTACT_INFO,
+      brandName: SITE_CONFIG.brandName,
+    },
     delivery: DELIVERY_INFO,
+    payment: PAYMENT_INFO,
     faqs: FAQS,
     whatsappMessages: WHATSAPP_MESSAGES,
   };

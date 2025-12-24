@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useProductBySlug } from '@/api';
@@ -11,6 +11,9 @@ import ProductInfo from '@/features/products/components/ProductInfo';
 import SizeSelector from '@/features/products/components/SizeSelector';
 import OrderButtons from '@/features/products/components/OrderButtons';
 import TrustSignals from '@/features/products/components/TrustSignals';
+import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
+import ErrorDisplay from '@/shared/components/ui/ErrorDisplay';
+import EmptyState from '@/shared/components/ui/EmptyState';
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -36,10 +39,7 @@ export default function ProductDetailPage() {
   if (isLoading || (!product && !error)) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-black border-r-transparent mb-4"></div>
-          <p className="text-gray-600">Loading product...</p>
-        </div>
+        <LoadingSpinner message="Loading product..." />
       </div>
     );
   }
@@ -48,18 +48,12 @@ export default function ProductDetailPage() {
   if (error) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-3xl font-light mb-4 text-red-600">
-            Error Loading Product
-          </h1>
-          <p className="text-gray-600 mb-6">{error.message}</p>
-          <Link
-            href="/products"
-            className="inline-block text-sm tracking-wide underline underline-offset-4 hover:no-underline transition"
-          >
-            Back to Products
-          </Link>
-        </div>
+        <ErrorDisplay
+          title="Error Loading Product"
+          message={error.message}
+          backLinkHref="/products"
+          backLinkText="Back to Products"
+        />
       </div>
     );
   }
@@ -67,14 +61,13 @@ export default function ProductDetailPage() {
   // Not found state
   if (!product) {
     return (
-      <div className="container mx-auto px-4 py-16 text-center">
-        <h1 className="text-3xl font-light mb-4">Product Not Found</h1>
-        <Link
-          href="/products"
-          className="text-sm tracking-wide underline underline-offset-4 hover:no-underline transition"
-        >
-          Back to Products
-        </Link>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <EmptyState
+          message="Product Not Found"
+          showLink
+          linkHref="/products"
+          linkText="Back to Products"
+        />
       </div>
     );
   }
@@ -92,7 +85,7 @@ export default function ProductDetailPage() {
       <div className="pb-20 px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Breadcrumb */}
-          <div className="mb-8 text-sm text-gray-500 tracking-wide">
+          <nav className="mb-8 text-sm text-gray-500 tracking-wide" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-black transition">
               HOME
             </Link>
@@ -102,7 +95,7 @@ export default function ProductDetailPage() {
             </Link>
             <span className="mx-2">/</span>
             <span className="text-black">{product.title.toUpperCase()}</span>
-          </div>
+          </nav>
 
           <div className="grid md:grid-cols-2 gap-16">
             {/* Product Images */}

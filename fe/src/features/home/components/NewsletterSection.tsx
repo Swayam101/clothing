@@ -5,6 +5,7 @@ import Section from '@/shared/components/ui/Section';
 import Input from '@/shared/components/ui/Input';
 import Button from '@/shared/components/ui/Button';
 import { useNewsletterStore } from '@/store/useNewsletterStore';
+import { HOME_NEWSLETTER } from '@/data/content/pages/home';
 
 const NewsletterSection: React.FC = () => {
   const { email, isSubscribed, isLoading, error, setEmail, subscribe } =
@@ -19,18 +20,18 @@ const NewsletterSection: React.FC = () => {
     <Section background="gray" className="py-24">
       <div className="max-w-4xl mx-auto text-center space-y-8">
         <h2 className="text-5xl font-light leading-tight">
-          Join the Thrift
+          {HOME_NEWSLETTER.titleLine1}
           <br />
-          Community
+          {HOME_NEWSLETTER.titleLine2}
         </h2>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Get first dibs on fresh thrifted drops and exclusive vintage finds ✨
+          {HOME_NEWSLETTER.subtitle}
         </p>
 
         {isSubscribed ? (
           <div className="bg-black text-white py-4 px-6 max-w-lg mx-auto">
             <p className="text-sm tracking-wide">
-              Thank you for subscribing! Check your email.
+              {HOME_NEWSLETTER.successMessage}
             </p>
           </div>
         ) : (
@@ -40,7 +41,7 @@ const NewsletterSection: React.FC = () => {
           >
             <Input
               type="email"
-              placeholder="Enter your email"
+              placeholder={HOME_NEWSLETTER.placeholder}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="flex-1"
@@ -50,7 +51,7 @@ const NewsletterSection: React.FC = () => {
               disabled={isLoading}
               className="whitespace-nowrap"
             >
-              {isLoading ? 'SUBSCRIBING...' : 'SUBSCRIBE'}
+              {isLoading ? HOME_NEWSLETTER.loadingText : HOME_NEWSLETTER.buttonText}
             </Button>
           </form>
         )}

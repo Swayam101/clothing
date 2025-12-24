@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Section from '@/shared/components/ui/Section';
 import SectionHeader from '@/shared/components/ui/SectionHeader';
 import ProductCard from '@/shared/components/ProductCard';
 import Pagination from '@/shared/components/ui/Pagination';
+import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
+import ErrorDisplay from '@/shared/components/ui/ErrorDisplay';
+import EmptyState from '@/shared/components/ui/EmptyState';
 import { useProducts } from '@/api';
-
-const PRODUCTS_PER_PAGE = 12;
+import { PRODUCTS_PAGE } from '@/data/content/pages/products';
 
 export default function ProductsPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,7 +17,7 @@ export default function ProductsPage() {
   // Fetch products from new API
   const { data, isLoading, error } = useProducts({
     page: currentPage,
-    limit: PRODUCTS_PER_PAGE,
+    limit: PRODUCTS_PAGE.pagination.itemsPerPage,
     inStock: true,
     isActive: true,
   });
@@ -31,15 +33,9 @@ export default function ProductsPage() {
   if (isLoading) {
     return (
       <Section>
-        <SectionHeader
-          title="Thrift Shop"
-          subtitle="Discover unique pre-loved pieces, each with their own story"
-        />
+        <SectionHeader title={PRODUCTS_PAGE.header.title} subtitle={PRODUCTS_PAGE.header.subtitle} />
         <div className="flex items-center justify-center py-20">
-          <div className="text-center">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-black border-r-transparent mb-4"></div>
-            <p className="text-gray-600">Finding thrifted treasures...</p>
-          </div>
+          <LoadingSpinner message={PRODUCTS_PAGE.loading.message} />
         </div>
       </Section>
     );
@@ -48,15 +44,13 @@ export default function ProductsPage() {
   if (error) {
     return (
       <Section>
-        <SectionHeader
-          title="Thrift Shop"
-          subtitle="Discover unique pre-loved pieces, each with their own story"
-        />
+        <SectionHeader title={PRODUCTS_PAGE.header.title} subtitle={PRODUCTS_PAGE.header.subtitle} />
         <div className="flex items-center justify-center py-20">
-          <div className="text-center text-red-600">
-            <p className="text-lg font-medium mb-2">Error loading products</p>
-            <p className="text-sm">{error.message}</p>
-          </div>
+          <ErrorDisplay
+            title={PRODUCTS_PAGE.error.title}
+            message={error.message}
+            showBackLink={false}
+          />
         </div>
       </Section>
     );
@@ -65,14 +59,9 @@ export default function ProductsPage() {
   if (!products.length) {
     return (
       <Section>
-        <SectionHeader
-          title="Thrift Shop"
-          subtitle="Discover unique pre-loved pieces, each with their own story"
-        />
+        <SectionHeader title={PRODUCTS_PAGE.header.title} subtitle={PRODUCTS_PAGE.header.subtitle} />
         <div className="flex items-center justify-center py-20">
-          <p className="text-gray-600">
-            No thrifted pieces available at the moment. Check back soon!
-          </p>
+          <EmptyState message={PRODUCTS_PAGE.empty.message} />
         </div>
       </Section>
     );
@@ -80,10 +69,7 @@ export default function ProductsPage() {
 
   return (
     <Section>
-      <SectionHeader
-        title="Thrift Shop"
-        subtitle="Discover unique pre-loved pieces, each with their own story"
-      />
+      <SectionHeader title={PRODUCTS_PAGE.header.title} subtitle={PRODUCTS_PAGE.header.subtitle} />
 
       {/* Products Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
@@ -95,18 +81,16 @@ export default function ProductsPage() {
       {/* Pagination */}
       {data?.data?.pagination && (
         <div className="mt-16 space-y-6">
-          {/* Pagination Controls */}
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={setCurrentPage}
           />
 
-          {/* Pagination Info */}
           <div className="text-center text-sm text-gray-500">
-            Showing {products.length} of {data.data.pagination.total} products
+            {PRODUCTS_PAGE.pagination.showingText} {products.length} {PRODUCTS_PAGE.pagination.ofText} {data.data.pagination.total} {PRODUCTS_PAGE.pagination.productsText}
             <span className="mx-2">•</span>
-            Page {currentPage} of {totalPages}
+            {PRODUCTS_PAGE.pagination.pageText} {currentPage} {PRODUCTS_PAGE.pagination.ofText} {totalPages}
           </div>
         </div>
       )}

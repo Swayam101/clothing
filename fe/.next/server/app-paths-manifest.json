@@ -1,6 +1,8 @@
 {
+  "/size-guide/page": "app/size-guide/page.js",
   "/page": "app/page.js",
-  "/privacy/page": "app/privacy/page.js",
-  "/terms/page": "app/terms/page.js",
-  "/data-deletion/page": "app/data-deletion/page.js"
+  "/about/page": "app/about/page.js",
+  "/login/page": "app/login/page.js",
+  "/products/page": "app/products/page.js",
+  "/products/[slug]/page": "app/products/[slug]/page.js"
 }

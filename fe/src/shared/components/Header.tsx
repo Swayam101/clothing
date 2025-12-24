@@ -8,6 +8,7 @@ import { useConfig } from '@/context/ConfigContext';
 import { useUIStore } from '@/store/useUIStore';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useFirebaseAuth } from '@/hooks/useFirebaseAuth';
+import { NAVIGATION } from '@/data/content/site';
 
 const Header: React.FC = () => {
   const { contact } = useConfig();
@@ -16,12 +17,7 @@ const Header: React.FC = () => {
   const { signOut } = useFirebaseAuth();
   const router = useRouter();
 
-  const navLinks = [
-    { name: 'SHOP', path: '/products' },
-    { name: 'SIZE GUIDE', path: '/size-guide' },
-    { name: 'ABOUT', path: '/about' },
-    { name: 'CONTACT', path: '/contact' },
-  ];
+  const navLinks = NAVIGATION.mainNav;
 
   const handleLogout = async () => {
     const result = await signOut();
@@ -76,7 +72,7 @@ const Header: React.FC = () => {
                     aria-label="Logout"
                   >
                     <LogOut size={14} strokeWidth={1.5} />
-                    <span>LOGOUT</span>
+                    <span>{NAVIGATION.auth.signOut}</span>
                   </button>
                 </>
               ) : (
@@ -84,7 +80,7 @@ const Header: React.FC = () => {
                   href="/login"
                   className="px-4 py-2 text-xs tracking-wide bg-black text-white hover:bg-gray-800 transition-all duration-300"
                 >
-                  SIGN IN
+                  {NAVIGATION.auth.signIn}
                 </Link>
               )}
             </div>
@@ -135,7 +131,7 @@ const Header: React.FC = () => {
                       className="w-full flex items-center justify-center gap-2 px-4 py-3 text-xs tracking-wide border border-gray-300 hover:border-black hover:bg-black hover:text-white transition-all duration-300"
                     >
                       <LogOut size={14} strokeWidth={1.5} />
-                      <span>LOGOUT</span>
+                      <span>{NAVIGATION.auth.signOut}</span>
                     </button>
                   </>
                 ) : (
@@ -144,7 +140,7 @@ const Header: React.FC = () => {
                     className="block w-full text-center px-4 py-3 text-xs tracking-wide bg-black text-white hover:bg-gray-800 transition-all duration-300"
                     onClick={closeMobileMenu}
                   >
-                    SIGN IN
+                    {NAVIGATION.auth.signIn}
                   </Link>
                 )}
               </div>
