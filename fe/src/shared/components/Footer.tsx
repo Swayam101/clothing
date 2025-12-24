@@ -1,12 +1,19 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { Instagram, Mail } from 'lucide-react';
 import { useConfig } from '@/context/ConfigContext';
 
 const Footer: React.FC = () => {
   const { contact } = useConfig();
   const currentYear = new Date().getFullYear();
+
+  const legalLinks = [
+    { name: 'Privacy Policy', href: '/privacy' },
+    { name: 'Terms & Conditions', href: '/terms' },
+    { name: 'Data Deletion', href: '/data-deletion' },
+  ];
 
   return (
     <footer className="border-t border-gray-200 bg-white">
@@ -56,6 +63,19 @@ const Footer: React.FC = () => {
             >
               <Mail className="w-5 h-5" strokeWidth={1.5} />
             </a>
+          </div>
+
+          {/* Legal Links */}
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+            {legalLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-xs text-gray-500 hover:text-black transition-colors tracking-wide"
+              >
+                {link.name}
+              </Link>
+            ))}
           </div>
 
           {/* Copyright */}
