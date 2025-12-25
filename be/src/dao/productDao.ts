@@ -10,6 +10,7 @@ export interface ProductQuery {
   isActive?: boolean;
   page?: number;
   limit?: number;
+  sort?: string;
 }
 
 export interface ProductUpdateData {
@@ -23,7 +24,7 @@ export interface ProductUpdateData {
   style?: string;
   size?: string;
   featured?: boolean | null;
-  image?: string;
+  image?: string[];
   isActive?: boolean;
 }
 
@@ -32,7 +33,7 @@ export const createProduct = async (productData: Partial<IProductDocument>): Pro
 };
 
 export const findAllProducts = async (query: ProductQuery = {}): Promise<IProductDocument[]> => {
-  const { style, color, size, condition, featured, search, isActive = true, page = 1, limit = 10 } = query;
+  const { style, color, size, condition, featured, search, isActive = true, page = 1, limit = 10, sort } = query;
 
   const filter: any = {};
 
@@ -71,8 +72,39 @@ export const findAllProducts = async (query: ProductQuery = {}): Promise<IProduc
 
   const skip = (page - 1) * limit;
 
+  // Build sort object
+  let sortObj: any = { createdAt: -1 }; // Default sort: newest first
+
+  if (sort) {
+    const [field, direction] = sort.split(':');
+    const sortDirection = direction === 'desc' ? -1 : 1;
+
+    // Create sort object based on field
+    switch (field) {
+      case 'price':
+        sortObj = { price: sortDirection };
+        break;
+      case 'title':
+        sortObj = { title: sortDirection };
+        break;
+      case 'createdAt':
+        sortObj = { createdAt: sortDirection };
+        break;
+      case 'featured':
+        // Featured products first, then by creation date
+        sortObj = { featured: -1, createdAt: -1 };
+        break;
+      case 'instock':
+        sortObj = { instock: sortDirection };
+        break;
+      default:
+        // Keep default sort
+        break;
+    }
+  }
+
   return await Product.find(filter)
-    .sort({ createdAt: -1 })
+    .sort(sortObj)
     .skip(skip)
     .limit(limit);
 };
@@ -116,7 +148,7 @@ export const findProductsByStyle = async (style: string): Promise<IProductDocume
 };
 
 export const countProducts = async (query: ProductQuery = {}): Promise<number> => {
-  const { style, color, size, condition, featured, search, isActive = true } = query;
+  const { style, color, size, condition, featured, search, isActive = true, sort } = query;
 
   const filter: any = {};
 

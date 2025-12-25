@@ -58,9 +58,14 @@ export const createProductSchema = yup.object({
     .nullable()
     .default(false),
   image: yup
-    .string()
-    .required('Product image is required')
-    .url('Image must be a valid URL'),
+    .array()
+    .of(
+      yup
+        .string()
+        .url('Each image must be a valid URL')
+    )
+    .min(1, 'At least one product image is required')
+    .required('Product images are required'),
   isActive: yup
     .boolean()
     .optional()
@@ -123,9 +128,13 @@ export const updateProductSchema = yup.object({
     .optional()
     .nullable(),
   image: yup
-    .string()
-    .optional()
-    .url('Image must be a valid URL'),
+    .array()
+    .of(
+      yup
+        .string()
+        .url('Each image must be a valid URL')
+    )
+    .optional(),
   isActive: yup
     .boolean()
     .optional(),

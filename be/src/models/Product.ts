@@ -12,7 +12,7 @@ export interface IProductDocument extends Document {
   style: string;
   size: string;
   featured?: boolean | null;
-  image: string;
+  image: string[];
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -68,9 +68,9 @@ const productSchema = new Schema<IProductDocument>(
       type: Boolean,
       default: false,
     },
-    image: {
+    image: [{
       type: String,
-    },
+    }],
     isActive: {
       type: Boolean,
       default: true,

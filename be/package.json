@@ -15,7 +15,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed": "NODE_ENV=development ts-node src/scripts/seedProducts.ts",
     "seed:admin": "NODE_ENV=development ts-node src/scripts/seedAdmin.ts",
-    "migrate:slugs": "NODE_ENV=development ts-node src/scripts/migrateProductSlugs.ts"
+    "migrate:slugs": "NODE_ENV=development ts-node src/scripts/migrateProductSlugs.ts",
+    "migrate:images": "NODE_ENV=development ts-node src/scripts/migrateProductImages.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

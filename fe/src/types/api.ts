@@ -13,7 +13,7 @@ export interface Product {
   style: string;
   size: string;
   featured: boolean;
-  image: string;
+  image: string[];
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -23,6 +23,7 @@ export interface ProductsQueryParams {
   page?: number;
   limit?: number;
   search?: string;
+  sort?: string;
   style?: string;
   color?: string;
   size?: string;

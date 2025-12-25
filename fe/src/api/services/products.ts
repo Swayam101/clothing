@@ -10,6 +10,7 @@ export const getProducts = async (params?: ProductsQueryParams): Promise<Product
   if (params?.page) queryParams.page = params.page;
   if (params?.limit) queryParams.limit = params.limit;
   if (params?.search) queryParams.search = params.search;
+  if (params?.sort) queryParams.sort = params.sort;
   if (params?.style) queryParams.style = params.style;
   if (params?.color) queryParams.color = params.color;
   if (params?.size) queryParams.size = params.size;

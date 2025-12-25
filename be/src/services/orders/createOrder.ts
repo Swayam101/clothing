@@ -43,7 +43,7 @@ const createOrder = async (
       fabric: product.fabric,
       quantity: item.quantity,
       price: product.price,
-      image: product.image,
+      image: product.image[0] || '',
     };
 
     orderItems.push(orderItem);

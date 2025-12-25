@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export interface CarouselSlide {
   id: number | string;
-  image: string;
+  image: string[];
   alt?: string;
   price?: number;
   label?: string;
@@ -66,7 +66,7 @@ const HeroCarousel = ({
             }`}
           >
             <Image
-              src={slide.image}
+              src={slide.image[0]}
               alt={slide.alt || `Slide ${index + 1}`}
               fill
               className="object-cover"

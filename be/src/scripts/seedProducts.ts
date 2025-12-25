@@ -14,7 +14,7 @@ interface ProductSeedData {
   style: string;
   size: string;
   featured?: boolean;
-  image: string;
+  image: string[];
   isActive?: boolean;
 }
 
@@ -31,7 +31,7 @@ const productSeedData: ProductSeedData[] = [
     style: "Casual",
     size: "M",
     featured: true,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500"
+    image: ["https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500"]
   },
   {
     title: "Navy Blue Polo Shirt",
@@ -43,7 +43,7 @@ const productSeedData: ProductSeedData[] = [
     description: "Elegant navy blue polo shirt with a classic collar design. Great for casual outings.",
     style: "Smart Casual",
     size: "L",
-    image: "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=500"
+    image: ["https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=500"]
   },
   {
     title: "Graphic Print Tee",
@@ -55,7 +55,7 @@ const productSeedData: ProductSeedData[] = [
     description: "Stylish black t-shirt with an eye-catching graphic print. Express your unique style.",
     style: "Streetwear",
     size: "S",
-    image: "https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=500"
+    image: ["https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=500"]
   },
 
   // Jeans
@@ -70,7 +70,7 @@ const productSeedData: ProductSeedData[] = [
     style: "Casual",
     size: "32x32",
     featured: true,
-    image: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=500"
+    image: ["https://images.unsplash.com/photo-1542272604-787c3835535d?w=500"]
   },
   {
     title: "High-Waisted Skinny Jeans",
@@ -82,7 +82,7 @@ const productSeedData: ProductSeedData[] = [
     description: "Flattering high-waisted skinny jeans that hug your curves perfectly. Made with stretch fabric for all-day comfort.",
     style: "Modern",
     size: "28x30",
-    image: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=500"
+    image: ["https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=500"]
   },
   {
     title: "Distressed Boyfriend Jeans",
@@ -94,7 +94,7 @@ const productSeedData: ProductSeedData[] = [
     description: "Edgy distressed boyfriend jeans with a relaxed fit. Perfect for a casual, lived-in look.",
     style: "Casual",
     size: "30x32",
-    image: "https://images.unsplash.com/photo-1475178626620-a4d074967452?w=500"
+    image: ["https://images.unsplash.com/photo-1475178626620-a4d074967452?w=500"]
   },
 
   // Dresses
@@ -109,7 +109,7 @@ const productSeedData: ProductSeedData[] = [
     style: "Evening",
     size: "8",
     featured: true,
-    image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500"
+    image: ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500"]
   },
   {
     title: "Floral Maxi Dress",
@@ -121,7 +121,7 @@ const productSeedData: ProductSeedData[] = [
     description: "Beautiful floral maxi dress perfect for summer occasions. Flowy and feminine.",
     style: "Boho",
     size: "10",
-    image: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=500"
+    image: ["https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=500"]
   },
   {
     title: "Bodycon Midi Dress",
@@ -133,7 +133,7 @@ const productSeedData: ProductSeedData[] = [
     description: "Bold red bodycon midi dress that accentuates your curves. Perfect for a night out.",
     style: "Bodycon",
     size: "6",
-    image: "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=500"
+    image: ["https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=500"]
   },
 
   // Jackets
@@ -148,7 +148,7 @@ const productSeedData: ProductSeedData[] = [
     style: "Biker",
     size: "M",
     featured: true,
-    image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500"
+    image: ["https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500"]
   },
   {
     title: "Denim Jacket",
@@ -160,7 +160,7 @@ const productSeedData: ProductSeedData[] = [
     description: "Vintage-inspired denim jacket with a relaxed fit. Perfect for layering over any outfit.",
     style: "Casual",
     size: "L",
-    image: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=500"
+    image: ["https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=500"]
   },
   {
     title: "Wool Coat",
@@ -172,7 +172,7 @@ const productSeedData: ProductSeedData[] = [
     description: "Elegant camel wool coat for colder weather. Luxurious and warm.",
     style: "Classic",
     size: "XL",
-    image: "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=500"
+    image: ["https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=500"]
   },
 
   // Accessories
@@ -186,7 +186,7 @@ const productSeedData: ProductSeedData[] = [
     description: "Stylish brown leather crossbody bag with adjustable strap. Perfect for everyday use.",
     style: "Casual",
     size: "One Size",
-    image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500"
+    image: ["https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500"]
   },
   {
     title: "Canvas Sneakers",
@@ -198,7 +198,7 @@ const productSeedData: ProductSeedData[] = [
     description: "Comfortable white canvas sneakers with rubber sole. Versatile and easy to style.",
     style: "Casual",
     size: "8",
-    image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500"
+    image: ["https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500"]
   },
   {
     title: "Silk Scarf",
@@ -210,7 +210,7 @@ const productSeedData: ProductSeedData[] = [
     description: "Elegant silk scarf with beautiful patterns. Adds a touch of luxury to any outfit.",
     style: "Accessories",
     size: "One Size",
-    image: "https://images.unsplash.com/photo-1601762603339-fd61e28b698a?w=500"
+    image: ["https://images.unsplash.com/photo-1601762603339-fd61e28b698a?w=500"]
   },
 
   // More sizes for the same products
@@ -224,7 +224,7 @@ const productSeedData: ProductSeedData[] = [
     description: "A comfortable, classic white t-shirt made from high-quality cotton. Perfect for everyday wear.",
     style: "Casual",
     size: "L",
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500"
+    image: ["https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500"]
   },
   {
     title: "Classic White Cotton T-Shirt",
@@ -236,7 +236,7 @@ const productSeedData: ProductSeedData[] = [
     description: "A comfortable, classic white t-shirt made from high-quality cotton. Perfect for everyday wear.",
     style: "Casual",
     size: "XL",
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500"
+    image: ["https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500"]
   },
   {
     title: "Slim Fit Dark Wash Jeans",
@@ -248,7 +248,7 @@ const productSeedData: ProductSeedData[] = [
     description: "Modern slim fit jeans in a classic dark wash. Comfortable and versatile for any occasion.",
     style: "Casual",
     size: "34x32",
-    image: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=500"
+    image: ["https://images.unsplash.com/photo-1542272604-787c3835535d?w=500"]
   }
 ];
 

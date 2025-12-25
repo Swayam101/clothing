@@ -66,7 +66,7 @@ export interface IProduct {
   style: string;
   size: string;
   featured?: boolean | null;
-  image: string;
+  image: string[];
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -83,7 +83,7 @@ export interface CreateProductRequest {
   style: string;
   size: string;
   featured?: boolean | null;
-  image?: string;
+  image?: string[];
 }
 
 export interface UpdateProductRequest {
@@ -97,7 +97,7 @@ export interface UpdateProductRequest {
   style?: string;
   size?: string;
   featured?: boolean | null;
-  image?: string;
+  image?: string[];
   isActive?: boolean;
 }
 
@@ -110,6 +110,7 @@ export interface ProductQueryParams {
   search?: string;
   page?: number;
   limit?: number;
+  sort?: string;
 }
 
 export interface ProductResponse {

@@ -48,6 +48,23 @@ const getAllProducts = asyncWrapper(async (req: Request, res: Response): Promise
     }
   }
 
+  if (req.query.sort && typeof req.query.sort === 'string') {
+    // Validate sort parameter for security
+    const allowedSortFields = ['price', 'title', 'createdAt', 'featured', 'instock'];
+    const sortParam = req.query.sort;
+
+    // Check if it's a valid sort format (field or field:direction)
+    if (sortParam.includes(':')) {
+      const [field, direction] = sortParam.split(':');
+      if (allowedSortFields.includes(field) && ['asc', 'desc'].includes(direction)) {
+        query.sort = sortParam;
+      }
+    } else if (allowedSortFields.includes(sortParam)) {
+      // Default to ascending for single field
+      query.sort = `${sortParam}:asc`;
+    }
+  }
+
   const result = await getAllProductsService(query);
   jsonResponse(res, 200, true, result, undefined, 'Products retrieved successfully');
 });

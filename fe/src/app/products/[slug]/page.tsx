@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useProductBySlug } from '@/api';
-import { useProductStore } from '@/store/useProductStore';
 import { useConfig } from '@/context/ConfigContext';
 import ImageGallery from '@/features/products/components/ImageGallery';
 import ProductInfo from '@/features/products/components/ProductInfo';
@@ -19,7 +18,6 @@ export default function ProductDetailPage() {
   const params = useParams();
   const slug = params.slug as string;
   const { contact } = useConfig();
-  const { selectedSize, setSelectedSize, resetSelection } = useProductStore();
 
   // Fetch product directly by slug
   const { data: productData, isLoading, error } = useProductBySlug(slug || '');
@@ -29,11 +27,6 @@ export default function ProductDetailPage() {
     if (!productData?.data) return null;
     return productData.data;
   }, [productData]);
-
-  useEffect(() => {
-    // Reset size selection when changing products
-    resetSelection();
-  }, [slug, resetSelection]);
 
   // Loading state
   if (isLoading || (!product && !error)) {
@@ -73,10 +66,6 @@ export default function ProductDetailPage() {
   }
 
   const handleInstagramOrder = () => {
-    if (!selectedSize) {
-      alert('Please select a size first to claim this thrifted piece!');
-      return;
-    }
     window.open(contact.instagramUrl, '_blank');
   };
 
@@ -99,7 +88,7 @@ export default function ProductDetailPage() {
 
           <div className="grid md:grid-cols-2 gap-16">
             {/* Product Images */}
-            <ImageGallery images={[product.image]} productName={product.title} />
+            <ImageGallery images={Array.isArray(product.image) ? product.image : [product.image]} productName={product.title} />
 
             {/* Product Info & Actions */}
             <div className="space-y-8">
@@ -107,20 +96,22 @@ export default function ProductDetailPage() {
                 name={product.title}
                 price={product.price}
                 description={product.description}
+                color={product.color}
+                condition={product.condition}
                 fabric={product.fabric}
-                fit={product.style}
-                care={product.condition}
+                style={product.style}
+                instock={product.instock}
+                featured={product.featured}
+                size={product.size}
+                slug={slug}
               />
 
-              <SizeSelector
-                sizes={[product.size]}
-                selectedSize={selectedSize}
-                onSizeSelect={setSelectedSize}
-              />
+            
 
               <OrderButtons
-                selectedSize={selectedSize}
+                selectedSize={product.size}
                 onInstagramOrder={handleInstagramOrder}
+                isOutOfStock={product.instock === 0}
               />
 
               <TrustSignals />

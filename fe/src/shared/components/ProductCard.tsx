@@ -14,12 +14,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   // Use slug from backend
   const slug = product.slug;
 
+  // Handle both single image string and image array
+  const imageUrl = Array.isArray(product.image) ? product.image[0] : product.image;
+
   return (
     <Link href={`/products/${slug}`} className="group cursor-pointer block">
       {/* Product Image */}
       <div className="relative overflow-hidden bg-gray-100 aspect-square mb-4">
         <Image
-          src={product.image}
+          src={imageUrl}
           alt={product.title}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-500"

@@ -2,22 +2,17 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Badge from '@/shared/components/ui/Badge';
 
 interface SizeSelectorProps {
-  sizes: string[];
-  selectedSize: string;
-  onSizeSelect: (size: string) => void;
+  size: string;
 }
 
-const SizeSelector: React.FC<SizeSelectorProps> = ({
-  sizes,
-  selectedSize,
-  onSizeSelect,
-}) => {
+const SizeSelector: React.FC<SizeSelectorProps> = ({ size }) => {
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm tracking-wide font-medium">SELECT SIZE *</h3>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm tracking-wide font-medium">SIZE</h3>
         <Link
           href="/size-guide"
           className="text-sm underline underline-offset-4 hover:no-underline transition"
@@ -25,20 +20,10 @@ const SizeSelector: React.FC<SizeSelectorProps> = ({
           Size Guide
         </Link>
       </div>
-      <div className="flex flex-wrap gap-3">
-        {sizes.map((size) => (
-          <button
-            key={size}
-            onClick={() => onSizeSelect(size)}
-            className={`px-6 py-3 border text-sm tracking-wide transition-all ${
-              selectedSize === size
-                ? 'border-black bg-black text-white'
-                : 'border-gray-300 hover:border-black'
-            }`}
-          >
-            {size}
-          </button>
-        ))}
+      <div className="flex items-center gap-3">
+        <Badge variant="outline" size="lg">
+          {size}
+        </Badge>
       </div>
     </div>
   );
