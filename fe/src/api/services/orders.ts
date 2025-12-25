@@ -5,6 +5,7 @@ import type {
   CreateOrderResponse,
   OrdersResponse,
   OrderResponse,
+  OrderVerificationResponse,
 } from '../../types/order';
 
 // Create new order
@@ -34,6 +35,12 @@ export const getMyOrders = async (params?: {
 // Get specific order by ID
 export const getOrderById = async (orderId: string): Promise<OrderResponse> => {
   const response = await apiClient.get(`${API_ENDPOINTS.ORDERS.GET_ORDER}/${orderId}`);
+  return response.data;
+};
+
+// Verify order payment status
+export const verifyOrder = async (orderId: string): Promise<OrderVerificationResponse> => {
+  const response = await apiClient.get(`${API_ENDPOINTS.ORDERS.VERIFY}/${orderId}`);
   return response.data;
 };
 

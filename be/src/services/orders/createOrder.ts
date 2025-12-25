@@ -18,36 +18,37 @@ const createOrder = async (
   }
 
   // Validate products and calculate total
+  // Quantity is ALWAYS 1 for each product
   const orderItems: OrderItem[] = [];
   let totalAmount = 0;
 
-  for (const item of orderData.items) {
-    const product = await findProductById(item.product);
+  for (const productId of orderData.items) {
+    const product = await findProductById(productId);
     if (!product) {
-      throw new Error(`Product ${item.product} not found`);
+      throw new Error(`Product ${productId} not found`);
     }
 
     if (!product.isActive) {
       throw new Error(`Product ${product.title} is not available`);
     }
 
-    if (product.instock < item.quantity) {
-      throw new Error(`Insufficient stock for ${product.title}. Available: ${product.instock}`);
+    if (product.instock < 1) {
+      throw new Error(`${product.title} is out of stock`);
     }
 
     const orderItem: OrderItem = {
-      product: new Types.ObjectId(item.product),
+      product: new Types.ObjectId(productId),
       title: product.title,
       color: product.color,
       size: product.size,
       fabric: product.fabric,
-      quantity: item.quantity,
+      quantity: 1, // ALWAYS 1
       price: product.price,
       image: product.image[0] || '',
     };
 
     orderItems.push(orderItem);
-    totalAmount += product.price * item.quantity;
+    totalAmount += product.price; // No multiplication - always quantity 1
   }
 
   // Generate unique order ID
@@ -90,7 +91,7 @@ const createOrder = async (
     // This allows for COD or manual payment processing
   }
 
-  // Create order data
+  // Create order data with provided delivery details
   const createData: CreateOrderData = {
     user: new Types.ObjectId(user._id),
     items: orderItems,
@@ -98,14 +99,14 @@ const createOrder = async (
     customer: {
       name: user.name || user.email,
       email: user.email,
-      phone: user.phone || '0000000000',
+      phone: orderData.phone, // Phone from request
     },
-    shippingAddress: orderData.shippingAddress,
-    billingAddress: orderData.billingAddress,
-    paymentMethod: orderData.paymentMethod,
+    shippingAddress: orderData.deliveryAddress, // Delivery address from request
+    billingAddress: orderData.deliveryAddress, // Same as delivery for simplicity
+    paymentMethod: 'cashfree', // Default to Cashfree
     cashfreeOrderId,
     paymentSessionId,
-    customerNotes: orderData.customerNotes,
+    customerNotes: undefined,
   };
 
   const order = await createOrderDao(createData);

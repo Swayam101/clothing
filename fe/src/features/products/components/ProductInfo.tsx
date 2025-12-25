@@ -67,13 +67,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
             />
           </div>
         </div>
-        <div className="flex items-center justify-between">
-          <p className="text-3xl font-light">₹{price.toFixed(2)}</p>
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <Eye className="w-4 h-4" />
-            <span>{viewCount} views</span>
-          </div>
-        </div>
+  
       </div>
 
       {/* Description */}

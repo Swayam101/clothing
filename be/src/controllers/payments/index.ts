@@ -1,2 +1,1 @@
-export * from './createOrder';
-export * from './verifyOrder';
+export { default as verifyOrder } from './verifyOrder';

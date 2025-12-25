@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST="{}"
+self.__REACT_LOADABLE_MANIFEST="{\"app/products/page.tsx -> @/features/products/components/ProductsContent\":{\"id\":\"app/products/page.tsx -> @/features/products/components/ProductsContent\",\"files\":[\"static/chunks/_app-pages-browser_src_features_products_components_ProductsContent_tsx.js\"]}}"

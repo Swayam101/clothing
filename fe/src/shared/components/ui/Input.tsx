@@ -6,6 +6,8 @@ interface InputProps {
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
+  disabled?: boolean;
+  maxLength?: number;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -14,6 +16,8 @@ const Input: React.FC<InputProps> = ({
   value,
   onChange,
   className = '',
+  disabled = false,
+  maxLength,
 }) => {
   return (
     <input
@@ -21,7 +25,9 @@ const Input: React.FC<InputProps> = ({
       placeholder={placeholder}
       value={value}
       onChange={onChange}
-      className={`px-6 py-4 border border-gray-300 focus:outline-none focus:border-black transition text-sm ${className}`}
+      disabled={disabled}
+      maxLength={maxLength}
+      className={`px-6 py-4 border border-gray-300 focus:outline-none focus:border-black transition text-sm disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed ${className}`}
     />
   );
 };

@@ -1,3 +1,7 @@
 {
+  "/payment-result/page": "app/payment-result/page.js",
+  "/order-failure/page": "app/order-failure/page.js",
+  "/page": "app/page.js",
+  "/products/page": "app/products/page.js",
   "/products/[slug]/page": "app/products/[slug]/page.js"
 }

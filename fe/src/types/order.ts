@@ -53,12 +53,10 @@ export interface PaymentSession {
 }
 
 export interface CreateOrderData {
-  items: Array<{
-    product: string;
-    quantity: number;
-  }>;
-  shippingAddress: Address;
+  items: string[]; // Array of product IDs (server expects strings, not objects)
+  deliveryAddress: Address; // Server expects deliveryAddress, not shippingAddress
   billingAddress: Address;
+  phone: string; // Phone number is required by server
   paymentMethod: 'cashfree';
   customerNotes?: string;
 }
@@ -87,6 +85,16 @@ export interface OrdersResponse {
 export interface OrderResponse {
   success: boolean;
   data: Order;
+}
+
+export interface OrderVerificationResponse {
+  success: boolean;
+  data: {
+    orderId: string;
+    paymentStatus: Order['paymentStatus'];
+    orderStatus: Order['status'];
+    totalAmount: number;
+  };
 }
 
 export interface OrderError {

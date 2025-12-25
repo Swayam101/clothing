@@ -18,6 +18,7 @@ export const API_ENDPOINTS = {
     CREATE: '/orders',
     MY_ORDERS: '/orders',
     GET_ORDER: '/orders',
+    VERIFY: '/orders/verify',
   },
 } as const;
 

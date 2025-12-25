@@ -6,6 +6,10 @@ export { default as Header } from './Header';
 export { default as ProductCard } from './ProductCard';
 export { default as SearchBar } from './SearchBar';
 export { default as ShareButton } from './ShareButton';
+export { default as OrderModal } from './OrderModal';
+export { default as PaymentModal } from './PaymentModal';
+export { default as OrderSuccess } from './OrderSuccess';
+export { default as OrderFailure } from './OrderFailure';
 export { default as StickyWhatsApp } from './StickyWhatsApp';
 export { RouteProtector, useAuthCheck, PROFILE_QUERY_KEY } from './RouteProtector';
 

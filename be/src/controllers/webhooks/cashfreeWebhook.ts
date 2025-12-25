@@ -44,12 +44,13 @@ const cashfreeWebhook = asyncWrapper(async (req: AuthRequest, res: Response): Pr
     await order.save();
 
     // Reduce stock for each item in the order
+    // Note: Quantity is always 1, so we always decrement by 1
     for (const item of order.items) {
       const Product = require('../../models/Product').default;
       const product = await Product.findById(item.product);
       
       if (product) {
-        const newStock = product.instock - item.quantity;
+        const newStock = product.instock - 1; // Always -1 since quantity is always 1
         await updateProductStock(item.product.toString(), newStock);
         logger.info(`Reduced stock for product ${product.title}: ${product.instock} -> ${newStock}`);
       }

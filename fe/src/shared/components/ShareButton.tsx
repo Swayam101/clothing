@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Share2, MessageCircle, Facebook, Twitter, Link2, Copy, Check, X } from 'lucide-react';
+import { useModal } from '@/hooks/useModal';
 
 interface ShareButtonProps {
   productUrl: string;
@@ -18,6 +19,21 @@ const ShareButton: React.FC<ShareButtonProps> = ({
 }) => {
   const [showShareModal, setShowShareModal] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
+
+  // Modal accessibility and scrolling
+  const { handleBackdropClick } = useModal({
+    isOpen: showShareModal,
+    onClose: () => setShowShareModal(false)
+  });
+  const modalRef = useRef<HTMLDivElement>(null);
+  const initialFocusRef = useRef<HTMLButtonElement>(null);
+
+  // Focus management
+  useEffect(() => {
+    if (showShareModal && initialFocusRef.current) {
+      initialFocusRef.current.focus();
+    }
+  }, [showShareModal]);
 
   // Share functionality
   const shareText = `Check out this amazing ${productName} from Drift N Thrift! ✨`;
@@ -87,22 +103,36 @@ const ShareButton: React.FC<ShareButtonProps> = ({
           {/* Backdrop */}
           <div
             className="fixed inset-0 bg-black/50 z-50"
-            onClick={() => setShowShareModal(false)}
+            onClick={handleBackdropClick}
+            aria-hidden="true"
           />
 
           {/* Modal */}
-          <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-50 transform transition-transform duration-300 ease-out">
-            <div className="p-6">
-              {/* Header */}
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-medium text-gray-900">Share this piece</h3>
-                <button
-                  onClick={() => setShowShareModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <X className="w-5 h-5 text-gray-500" />
-                </button>
-              </div>
+          <div
+            className="fixed inset-0 flex items-center justify-center z-50 p-4"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="share-modal-title"
+          >
+            <div
+              ref={modalRef}
+              className="bg-white w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden"
+            >
+              <div className="p-6">
+                {/* Header */}
+                <div className="flex items-center justify-between mb-6">
+                  <h3 id="share-modal-title" className="text-lg font-medium text-gray-900">
+                    Share this piece
+                  </h3>
+                  <button
+                    ref={initialFocusRef}
+                    onClick={() => setShowShareModal(false)}
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                    aria-label="Close share modal"
+                  >
+                    <X className="w-5 h-5 text-gray-500" />
+                  </button>
+                </div>
 
               {/* Product Preview */}
               <div className="flex items-center gap-4 mb-6 p-4 bg-gray-50 rounded-xl">
@@ -155,6 +185,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({
                   </>
                 )}
               </button>
+              </div>
             </div>
           </div>
         </>

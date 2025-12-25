@@ -5,7 +5,6 @@ import { notFoundHandler } from './middleware/notFoundHandler';
 import healthRoutes from './routes/health';
 import authRoutes from './routes/auth';
 import productRoutes from './routes/products';
-import paymentRoutes from './routes/payments';
 import orderRoutes from './routes/orders';
 import webhookRoutes from './routes/webhooks';
 
@@ -22,8 +21,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use('/health', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
-app.use('/api/payments', paymentRoutes);
-app.use('/api/orders', orderRoutes);
+app.use('/api/orders', orderRoutes); // Unified order & payment endpoint
 app.use('/api/webhooks', webhookRoutes);
 
 app.use(notFoundHandler);

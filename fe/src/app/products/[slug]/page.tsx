@@ -110,7 +110,9 @@ export default function ProductDetailPage() {
 
               <OrderButtons
                 selectedSize={product.size}
-                onInstagramOrder={handleInstagramOrder}
+                productId={product._id}
+                productName={product.title}
+                productPrice={product.price}
                 isOutOfStock={product.instock === 0}
               />
 

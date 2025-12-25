@@ -172,15 +172,15 @@ export interface IOrder {
   updatedAt: Date;
 }
 
+/**
+ * Create Order Request
+ * Required: Product IDs, Delivery Address, Phone
+ * Quantity is ALWAYS 1 for each product
+ */
 export interface CreateOrderRequest {
-  items: Array<{
-    product: string;
-    quantity: number;
-  }>;
-  shippingAddress: OrderAddress;
-  billingAddress: OrderAddress;
-  paymentMethod: string;
-  customerNotes?: string;
+  items: string[]; // Product IDs
+  deliveryAddress: OrderAddress; // Delivery address
+  phone: string; // Contact phone (10 digits)
 }
 
 export interface UpdateOrderRequest {
@@ -216,17 +216,6 @@ export interface OrderStats {
 }
 
 // Payment types
-export interface CreateOrderRequest {
-  amount: number;
-  orderId: string;
-  customer: {
-    id: string;
-    name: string;
-    email: string;
-    phone: string;
-  };
-}
-
 export interface CashfreeOrderResponse {
   order_id: string;
   payment_session_id: string;

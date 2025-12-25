@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as orderService from '../services/orders';
 import type { CreateOrderData } from '../../types/order';
+import type { OrderVerificationResponse } from '../../types/order';
 
 // Query keys
 export const ORDER_QUERY_KEYS = {
@@ -42,6 +43,17 @@ export const useCreateOrder = () => {
       // Invalidate my orders list
       queryClient.invalidateQueries({ queryKey: ORDER_QUERY_KEYS.all });
     },
+  });
+};
+
+// Verify order payment status
+export const useVerifyOrder = (orderId: string, enabled: boolean = true) => {
+  return useQuery({
+    queryKey: [...ORDER_QUERY_KEYS.all, 'verify', orderId],
+    queryFn: () => orderService.verifyOrder(orderId),
+    enabled: !!orderId && enabled,
+    // Cache for 5 minutes since payment status doesn't change frequently
+    staleTime: 5 * 60 * 1000,
   });
 };
 

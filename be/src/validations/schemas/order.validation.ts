@@ -1,25 +1,9 @@
 import * as yup from 'yup';
 
 /**
- * Order item validation schema
+ * Delivery address validation
  */
-const orderItemSchema = yup.object({
-  product: yup
-    .string()
-    .required('Product ID is required')
-    .matches(/^[0-9a-fA-F]{24}$/, 'Invalid product ID format'),
-  quantity: yup
-    .number()
-    .required('Quantity is required')
-    .integer('Quantity must be an integer')
-    .min(1, 'Quantity must be at least 1')
-    .max(100, 'Quantity cannot exceed 100'),
-});
-
-/**
- * Address validation schema
- */
-const addressSchema = yup.object({
+const deliveryAddressSchema = yup.object({
   street: yup
     .string()
     .required('Street address is required')
@@ -50,51 +34,24 @@ const addressSchema = yup.object({
 });
 
 /**
- * Customer information validation schema
- */
-const customerSchema = yup.object({
-  name: yup
-    .string()
-    .required('Customer name is required')
-    .trim()
-    .max(100, 'Name must not exceed 100 characters'),
-  email: yup
-    .string()
-    .required('Customer email is required')
-    .email('Please provide a valid email address')
-    .lowercase()
-    .trim(),
-  phone: yup
-    .string()
-    .required('Customer phone is required')
-    .trim()
-    .matches(/^[0-9]{10}$/, 'Phone number must be exactly 10 digits'),
-});
-
-/**
- * Create order validation schema
+ * Create Order Schema
+ * Required: Product IDs, Delivery Address, Phone
+ * Quantity is ALWAYS 1 for each product
  */
 export const createOrderSchema = yup.object({
   items: yup
     .array()
-    .of(orderItemSchema)
-    .required('Order items are required')
-    .min(1, 'Order must contain at least one item'),
-  customer: customerSchema.required('Customer information is required'),
-  shippingAddress: addressSchema.required('Shipping address is required'),
-  billingAddress: addressSchema.required('Billing address is required'),
-  paymentMethod: yup
+    .of(yup.string().matches(/^[0-9a-fA-F]{24}$/, 'Invalid product ID format'))
+    .required('Product IDs are required')
+    .min(1, 'At least one product ID required'),
+  
+  deliveryAddress: deliveryAddressSchema.required('Delivery address is required'),
+  
+  phone: yup
     .string()
-    .required('Payment method is required')
-    .oneOf(
-      ['cashfree', 'card', 'upi', 'netbanking', 'wallet'],
-      'Invalid payment method'
-    ),
-  customerNotes: yup
-    .string()
-    .optional()
+    .required('Phone number is required')
     .trim()
-    .max(500, 'Customer notes must not exceed 500 characters'),
+    .matches(/^[0-9]{10}$/, 'Phone number must be exactly 10 digits'),
 });
 
 /**
