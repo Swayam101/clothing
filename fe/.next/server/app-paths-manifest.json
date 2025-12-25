@@ -2,15 +2,15 @@
   "/_not-found/page": "app/_not-found/page.js",
   "/about/page": "app/about/page.js",
   "/contact/page": "app/contact/page.js",
-  "/login/page": "app/login/page.js",
   "/data-deletion/page": "app/data-deletion/page.js",
+  "/login/page": "app/login/page.js",
+  "/order-failure/page": "app/order-failure/page.js",
   "/order-success/page": "app/order-success/page.js",
-  "/page": "app/page.js",
   "/privacy/page": "app/privacy/page.js",
-  "/products/[slug]/page": "app/products/[slug]/page.js",
-  "/payment-result/page": "app/payment-result/page.js",
+  "/page": "app/page.js",
   "/size-guide/page": "app/size-guide/page.js",
-  "/terms/page": "app/terms/page.js",
   "/products/page": "app/products/page.js",
-  "/order-failure/page": "app/order-failure/page.js"
+  "/payment-result/page": "app/payment-result/page.js",
+  "/products/[slug]/page": "app/products/[slug]/page.js",
+  "/terms/page": "app/terms/page.js"
 }

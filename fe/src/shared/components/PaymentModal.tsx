@@ -34,53 +34,171 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   onPaymentSuccess,
   onPaymentFailure,
 }) => {
+  console.log('🔍 PaymentModal - Component render:', {
+    isOpen,
+    orderId,
+    totalAmount,
+    paymentSessionId: paymentSession?.payment_session_id,
+    hasOnPaymentSuccess: !!onPaymentSuccess,
+    hasOnPaymentFailure: !!onPaymentFailure,
+  });
+
   const [isLoading, setIsLoading] = useState(false);
   const [sdkLoaded, setSdkLoaded] = useState(false);
   const [paymentInitiated, setPaymentInitiated] = useState(false);
 
   // Modal accessibility and scrolling
-  const { handleBackdropClick } = useModal({ isOpen, onClose });
+  const { handleBackdropClick } = useModal({
+    isOpen,
+    onClose: () => {
+      console.log('🔍 PaymentModal - Modal closed via backdrop or ESC');
+      onClose();
+    }
+  });
   const modalRef = useRef<HTMLDivElement>(null);
   const initialFocusRef = useRef<HTMLButtonElement>(null);
 
   // Focus management
   useEffect(() => {
+    console.log('🔍 PaymentModal - Focus management useEffect:', { isOpen });
     if (isOpen && initialFocusRef.current) {
       initialFocusRef.current.focus();
     }
   }, [isOpen]);
 
+  // Load Cashfree SDK
+  useEffect(() => {
+    console.log('🔍 PaymentModal - SDK Loading useEffect:', {
+      isOpen,
+      sdkLoaded,
+      hasCashfree: !!window.Cashfree,
+      userAgent: navigator.userAgent,
+      protocol: window.location.protocol,
+      hostname: window.location.hostname
+    });
+
+    if (isOpen && !sdkLoaded) {
+      console.log('🔍 PaymentModal - Starting SDK load...');
+
+      const loadCashfreeSDK = () => {
+        return new Promise<void>((resolve, reject) => {
+          // Check if already loaded
+          if (window.Cashfree) {
+            console.log('✅ PaymentModal - Cashfree SDK already available');
+            setSdkLoaded(true);
+            resolve();
+            return;
+          }
+
+          console.log('🔍 PaymentModal - Creating Cashfree script element...');
+
+          const script = document.createElement('script');
+          script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
+          script.async = true;
+          script.crossOrigin = 'anonymous';
+
+          script.onload = () => {
+            console.log('✅ PaymentModal - Cashfree SDK loaded successfully');
+            console.log('🔍 PaymentModal - window.Cashfree available:', !!window.Cashfree);
+            setSdkLoaded(true);
+            resolve();
+          };
+
+          script.onerror = (error) => {
+            console.error('❌ PaymentModal - Failed to load Cashfree SDK:', error);
+            console.error('❌ PaymentModal - Script load error details:', {
+              src: script.src,
+              error: error
+            });
+            reject(new Error('Failed to load Cashfree SDK'));
+          };
+
+          console.log('🔍 PaymentModal - Appending script to document head...');
+          document.head.appendChild(script);
+
+          // Timeout fallback
+          setTimeout(() => {
+            if (!window.Cashfree) {
+              console.error('❌ PaymentModal - SDK load timeout after 10 seconds');
+              reject(new Error('SDK load timeout'));
+            }
+          }, 10000);
+        });
+      };
+
+      loadCashfreeSDK().catch((error) => {
+        console.error('❌ PaymentModal - SDK loading error:', error);
+        onPaymentFailure?.(error);
+      });
+    }
+  }, [isOpen, sdkLoaded, onPaymentFailure]);
+
   const initiatePayment = useCallback(async () => {
+    console.log('🔍 PaymentModal - initiatePayment called:', {
+      hasCashfree: !!window.Cashfree,
+      sdkLoaded,
+      paymentSessionId: paymentSession.payment_session_id,
+      orderId,
+      totalAmount,
+      environment: process.env.NODE_ENV,
+      vercelEnv: process.env.VERCEL_ENV,
+      nextPublicVercelUrl: process.env.NEXT_PUBLIC_VERCEL_URL
+    });
     if (!window.Cashfree) {
-      console.error('Cashfree SDK not loaded');
+      console.error('❌ PaymentModal - Cashfree SDK not loaded');
+      console.error('❌ PaymentModal - window.Cashfree:', window.Cashfree);
+      console.error('❌ PaymentModal - sdkLoaded state:', sdkLoaded);
       onPaymentFailure?.(new Error('Payment SDK not available'));
       return;
     }
 
     try {
+      console.log('✅ PaymentModal - SDK available, initializing Cashfree...');
       setIsLoading(true);
       setPaymentInitiated(true);
 
       // Initialize Cashfree
+      const cashfreeMode = process.env.NODE_ENV === 'production' ? 'production' : 'sandbox';
+      console.log('🔍 PaymentModal - Initializing Cashfree with mode:', cashfreeMode);
+
       const cashfree = window.Cashfree({
-        mode: process.env.NODE_ENV === 'production' ? 'production' : 'sandbox'
+        mode: cashfreeMode
       });
 
+      console.log('✅ PaymentModal - Cashfree instance created:', !!cashfree);
+
       // Create checkout options
+      const returnUrl = `${window.location.origin}/payment-result?order_id=${orderId}`;
       const checkoutOptions = {
         paymentSessionId: paymentSession.payment_session_id,
-        returnUrl: `${window.location.origin}/payment-result?order_id=${orderId}`,
+        returnUrl: returnUrl,
         redirectTarget: '_self', // Stay in same tab
       };
 
-      console.log('Initiating payment with session:', paymentSession.payment_session_id);
+      console.log('🔍 PaymentModal - Checkout options:', {
+        paymentSessionId: paymentSession.payment_session_id,
+        returnUrl,
+        redirectTarget: '_self'
+      });
+
+      console.log('🚀 PaymentModal - Calling cashfree.checkout()...');
 
       // Start payment
       cashfree.checkout(checkoutOptions).then((result: any) => {
-        console.log('Payment result:', result);
+        console.log('✅ PaymentModal - Checkout success result:', result);
+        console.log('🔍 PaymentModal - Result details:', {
+          hasError: !!result.error,
+          hasRedirect: !!result.redirect,
+          resultKeys: Object.keys(result)
+        });
 
         if (result.error) {
-          console.error('Payment error:', result.error);
+          console.error('❌ PaymentModal - Checkout error:', result.error);
+          console.error('❌ PaymentModal - Error details:', {
+            error: result.error,
+            errorType: typeof result.error,
+            errorMessage: result.error?.message || 'Unknown error'
+          });
           setIsLoading(false);
           setPaymentInitiated(false);
           onPaymentFailure?.(result.error);
@@ -88,25 +206,69 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
         // Handle redirect (normal flow)
         if (result.redirect) {
-          console.log('Redirecting to payment page...');
+          console.log('🔄 PaymentModal - Redirecting to payment page...');
+          console.log('🔍 PaymentModal - Redirect details:', result.redirect);
           // Modal will close automatically when user is redirected
         }
       }).catch((error: any) => {
-        console.error('Payment initialization error:', error);
+        console.error('❌ PaymentModal - Checkout promise rejected:', error);
+        const errorObj = error as any;
+        console.error('❌ PaymentModal - Checkout error details:', {
+          error,
+          errorType: typeof error,
+          errorMessage: errorObj?.message || 'Unknown checkout error',
+          errorStack: errorObj?.stack
+        });
         setIsLoading(false);
         setPaymentInitiated(false);
         onPaymentFailure?.(error);
       });
 
     } catch (error) {
-      console.error('Payment setup error:', error);
+      console.error('❌ PaymentModal - Payment setup error:', error);
+      const errorObj = error as any;
+      console.error('❌ PaymentModal - Setup error details:', {
+        error,
+        errorType: typeof error,
+        errorMessage: errorObj?.message || 'Unknown setup error',
+        errorStack: errorObj?.stack,
+        cashfreeAvailable: !!window.Cashfree,
+        paymentSession: paymentSession
+      });
       setIsLoading(false);
       setPaymentInitiated(false);
       onPaymentFailure?.(error);
     }
   }, [paymentSession.payment_session_id, orderId, onPaymentFailure]);
 
-  if (!isOpen) return null;
+  // Initialize payment when modal opens and SDK is loaded
+  useEffect(() => {
+    console.log('🔍 PaymentModal - Payment Init useEffect:', {
+      isOpen,
+      sdkLoaded,
+      paymentInitiated,
+      hasCashfree: !!window.Cashfree
+    });
+
+    if (isOpen && sdkLoaded && !paymentInitiated) {
+      console.log('🔍 PaymentModal - Auto-initiating payment...');
+      initiatePayment();
+    }
+  }, [isOpen, sdkLoaded, paymentInitiated, initiatePayment]);
+
+  if (!isOpen) {
+    console.log('🔍 PaymentModal - Component not rendered (isOpen=false)');
+    return null;
+  }
+
+  console.log('🔍 PaymentModal - Rendering modal with props:', {
+    orderId,
+    totalAmount,
+    paymentSessionId: paymentSession.payment_session_id,
+    isLoading,
+    sdkLoaded,
+    paymentInitiated
+  });
 
   return (
     <>
@@ -144,7 +306,10 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
               </div>
               <button
                 ref={initialFocusRef}
-                onClick={onClose}
+                onClick={() => {
+                  console.log('🔍 PaymentModal - Close button clicked');
+                  onClose();
+                }}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                 disabled={isLoading}
                 aria-label="Close payment modal"
@@ -190,7 +355,10 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
                 </div>
 
                 <button
-                  onClick={initiatePayment}
+                  onClick={() => {
+                    console.log('🔍 PaymentModal - "Start Payment Process" button clicked');
+                    initiatePayment();
+                  }}
                   className="w-full py-4 bg-black text-white text-sm font-medium hover:bg-gray-900 transition-colors rounded-none"
                 >
                   Start Payment Process
