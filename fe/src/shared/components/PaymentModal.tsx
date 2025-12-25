@@ -39,8 +39,11 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     orderId,
     totalAmount,
     paymentSessionId: paymentSession?.payment_session_id,
+    paymentSessionFull: paymentSession,
     hasOnPaymentSuccess: !!onPaymentSuccess,
     hasOnPaymentFailure: !!onPaymentFailure,
+    timestamp: new Date().toISOString(),
+    renderCount: Math.random() // To distinguish renders
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -138,13 +141,49 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     console.log('🔍 PaymentModal - initiatePayment called:', {
       hasCashfree: !!window.Cashfree,
       sdkLoaded,
-      paymentSessionId: paymentSession.payment_session_id,
+      paymentSession: paymentSession,
+      paymentSessionId: paymentSession?.payment_session_id,
+      paymentSessionType: typeof paymentSession?.payment_session_id,
+      paymentSessionLength: paymentSession?.payment_session_id?.length,
       orderId,
       totalAmount,
       environment: process.env.NODE_ENV,
       vercelEnv: process.env.VERCEL_ENV,
-      nextPublicVercelUrl: process.env.NEXT_PUBLIC_VERCEL_URL
+      nextPublicVercelUrl: process.env.NEXT_PUBLIC_VERCEL_URL,
+      windowLocation: {
+        origin: window.location.origin,
+        hostname: window.location.hostname,
+        protocol: window.location.protocol,
+        port: window.location.port
+      }
     });
+
+    // Validate payment session before proceeding
+    if (!paymentSession?.payment_session_id) {
+      console.error('❌ PaymentModal - No payment session ID provided:', {
+        paymentSession,
+        paymentSessionKeys: paymentSession ? Object.keys(paymentSession) : 'null/undefined'
+      });
+      onPaymentFailure?.(new Error('Payment session ID is missing'));
+      return;
+    }
+
+    if (typeof paymentSession.payment_session_id !== 'string' || paymentSession.payment_session_id.trim() === '') {
+      console.error('❌ PaymentModal - Invalid payment session ID:', {
+        sessionId: paymentSession.payment_session_id,
+        type: typeof paymentSession.payment_session_id,
+        isEmpty: paymentSession.payment_session_id.trim() === ''
+      });
+      onPaymentFailure?.(new Error('Payment session ID is invalid'));
+      return;
+    }
+
+    console.log('✅ PaymentModal - Payment session validation passed:', {
+      sessionId: paymentSession.payment_session_id,
+      sessionIdLength: paymentSession.payment_session_id.length,
+      sessionIdPreview: paymentSession.payment_session_id.substring(0, 20) + '...'
+    });
+
     if (!window.Cashfree) {
       console.error('❌ PaymentModal - Cashfree SDK not loaded');
       console.error('❌ PaymentModal - window.Cashfree:', window.Cashfree);
@@ -176,49 +215,89 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         redirectTarget: '_self', // Stay in same tab
       };
 
-      console.log('🔍 PaymentModal - Checkout options:', {
-        paymentSessionId: paymentSession.payment_session_id,
-        returnUrl,
-        redirectTarget: '_self'
+      console.log('🔍 PaymentModal - Checkout options created:', {
+        paymentSessionId: checkoutOptions.paymentSessionId,
+        paymentSessionIdLength: checkoutOptions.paymentSessionId.length,
+        returnUrl: checkoutOptions.returnUrl,
+        redirectTarget: checkoutOptions.redirectTarget,
+        fullCheckoutOptions: checkoutOptions
       });
 
-      console.log('🚀 PaymentModal - Calling cashfree.checkout()...');
+      // Validate checkout options before calling
+      if (!checkoutOptions.paymentSessionId || checkoutOptions.paymentSessionId.trim() === '') {
+        console.error('❌ PaymentModal - Checkout options validation failed:', {
+          paymentSessionId: checkoutOptions.paymentSessionId,
+          isEmpty: !checkoutOptions.paymentSessionId || checkoutOptions.paymentSessionId.trim() === ''
+        });
+        onPaymentFailure?.(new Error('Invalid checkout options'));
+        return;
+      }
+
+      console.log('✅ PaymentModal - Checkout options validation passed');
+      console.log('🚀 PaymentModal - Calling cashfree.checkout() with options:', checkoutOptions);
 
       // Start payment
+      console.log('🔍 PaymentModal - About to call cashfree.checkout()...');
       cashfree.checkout(checkoutOptions).then((result: any) => {
-        console.log('✅ PaymentModal - Checkout success result:', result);
-        console.log('🔍 PaymentModal - Result details:', {
+        console.log('✅ PaymentModal - Checkout promise resolved:', result);
+        console.log('🔍 PaymentModal - Raw result object:', JSON.stringify(result, null, 2));
+        console.log('🔍 PaymentModal - Result analysis:', {
           hasError: !!result.error,
           hasRedirect: !!result.redirect,
-          resultKeys: Object.keys(result)
+          hasPayment: !!result.payment,
+          resultKeys: Object.keys(result),
+          resultType: typeof result,
+          isNull: result === null,
+          isUndefined: result === undefined
         });
 
         if (result.error) {
-          console.error('❌ PaymentModal - Checkout error:', result.error);
-          console.error('❌ PaymentModal - Error details:', {
+          console.error('❌ PaymentModal - Checkout returned error:', result.error);
+          console.error('❌ PaymentModal - Error breakdown:', {
             error: result.error,
             errorType: typeof result.error,
-            errorMessage: result.error?.message || 'Unknown error'
+            errorMessage: result.error?.message || 'No message',
+            errorCode: result.error?.code || 'No code',
+            errorDetails: JSON.stringify(result.error, null, 2)
           });
           setIsLoading(false);
           setPaymentInitiated(false);
           onPaymentFailure?.(result.error);
+          return;
         }
 
         // Handle redirect (normal flow)
         if (result.redirect) {
-          console.log('🔄 PaymentModal - Redirecting to payment page...');
-          console.log('🔍 PaymentModal - Redirect details:', result.redirect);
+          console.log('🔄 PaymentModal - Redirect detected, user will be redirected...');
+          console.log('🔍 PaymentModal - Redirect object:', result.redirect);
+          console.log('🔍 PaymentModal - Full redirect details:', JSON.stringify(result.redirect, null, 2));
           // Modal will close automatically when user is redirected
+          return;
         }
+
+        // Handle success case
+        if (result.payment) {
+          console.log('💰 PaymentModal - Payment object received:', result.payment);
+          console.log('💰 PaymentModal - Payment details:', JSON.stringify(result.payment, null, 2));
+          setIsLoading(false);
+          onPaymentSuccess?.(result);
+          return;
+        }
+
+        // Unexpected result
+        console.warn('⚠️ PaymentModal - Unexpected checkout result:', result);
+        setIsLoading(false);
+        onPaymentFailure?.(new Error('Unexpected checkout result'));
+
       }).catch((error: any) => {
         console.error('❌ PaymentModal - Checkout promise rejected:', error);
-        const errorObj = error as any;
-        console.error('❌ PaymentModal - Checkout error details:', {
+        console.error('❌ PaymentModal - Promise rejection details:', {
           error,
           errorType: typeof error,
-          errorMessage: errorObj?.message || 'Unknown checkout error',
-          errorStack: errorObj?.stack
+          errorMessage: error?.message || 'No message',
+          errorStack: error?.stack,
+          errorString: String(error),
+          errorJson: JSON.stringify(error, Object.getOwnPropertyNames(error))
         });
         setIsLoading(false);
         setPaymentInitiated(false);
@@ -244,16 +323,31 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
   // Initialize payment when modal opens and SDK is loaded
   useEffect(() => {
-    console.log('🔍 PaymentModal - Payment Init useEffect:', {
+    console.log('🔍 PaymentModal - Payment Init useEffect triggered:', {
       isOpen,
       sdkLoaded,
       paymentInitiated,
-      hasCashfree: !!window.Cashfree
+      hasCashfree: !!window.Cashfree,
+      modalProps: { orderId, totalAmount, paymentSessionId: paymentSession?.payment_session_id }
     });
 
     if (isOpen && sdkLoaded && !paymentInitiated) {
-      console.log('🔍 PaymentModal - Auto-initiating payment...');
+      console.log('🚀 PaymentModal - Conditions met for auto-initiating payment:', {
+        isOpen,
+        sdkLoaded,
+        paymentInitiated: !paymentInitiated,
+        hasCashfree: !!window.Cashfree
+      });
+      console.log('🔍 PaymentModal - About to call initiatePayment()...');
       initiatePayment();
+    } else {
+      console.log('⏸️ PaymentModal - Payment initiation skipped:', {
+        isOpen,
+        sdkLoaded,
+        paymentInitiated,
+        hasCashfree: !!window.Cashfree,
+        reason: !isOpen ? 'Modal not open' : !sdkLoaded ? 'SDK not loaded' : paymentInitiated ? 'Already initiated' : 'Cashfree not available'
+      });
     }
   }, [isOpen, sdkLoaded, paymentInitiated, initiatePayment]);
 
@@ -357,7 +451,13 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
                 <button
                   onClick={() => {
-                    console.log('🔍 PaymentModal - "Start Payment Process" button clicked');
+                    console.log('🔍 PaymentModal - "Start Payment Process" button clicked:', {
+                      timestamp: new Date().toISOString(),
+                      hasCashfree: !!window.Cashfree,
+                      sdkLoaded,
+                      paymentInitiated,
+                      paymentSessionId: paymentSession?.payment_session_id
+                    });
                     initiatePayment();
                   }}
                   className="w-full py-4 bg-black text-white text-sm font-medium hover:bg-gray-900 transition-colors rounded-none"
