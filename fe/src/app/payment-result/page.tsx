@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import React, { Suspense } from 'react';
 import { Loader2, CheckCircle, XCircle } from 'lucide-react';
 import { useVerifyOrder } from '@/api/hooks/useOrders';
 
-const PaymentResultPage: React.FC = () => {
+const PaymentResultContent: React.FC = () => {
+  const { useRouter, useSearchParams, useEffect } = require('next/navigation');
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get('order_id') || '';
@@ -103,6 +103,14 @@ const PaymentResultPage: React.FC = () => {
         )}
       </div>
     </div>
+  );
+};
+
+const PaymentResultPage: React.FC = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PaymentResultContent />
+    </Suspense>
   );
 };
 

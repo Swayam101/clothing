@@ -1,10 +1,10 @@
 'use client';
 
-import React from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import React, { Suspense } from 'react';
 import OrderSuccess from '@/shared/components/OrderSuccess';
 
-const OrderSuccessPage: React.FC = () => {
+const OrderSuccessContent: React.FC = () => {
+  const { useRouter, useSearchParams } = require('next/navigation');
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get('order_id') || '';
@@ -23,6 +23,14 @@ const OrderSuccessPage: React.FC = () => {
       onContinueShopping={handleContinueShopping}
       onViewOrders={handleViewOrders}
     />
+  );
+};
+
+const OrderSuccessPage: React.FC = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <OrderSuccessContent />
+    </Suspense>
   );
 };
 

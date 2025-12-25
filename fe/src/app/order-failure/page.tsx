@@ -1,10 +1,10 @@
 'use client';
 
-import React from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import React, { Suspense } from 'react';
 import OrderFailure from '@/shared/components/OrderFailure';
 
-const OrderFailurePage: React.FC = () => {
+const OrderFailureContent: React.FC = () => {
+  const { useRouter, useSearchParams } = require('next/navigation');
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get('order_id') || '';
@@ -25,6 +25,14 @@ const OrderFailurePage: React.FC = () => {
       onRetry={handleRetry}
       onContinueShopping={handleContinueShopping}
     />
+  );
+};
+
+const OrderFailurePage: React.FC = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <OrderFailureContent />
+    </Suspense>
   );
 };
 

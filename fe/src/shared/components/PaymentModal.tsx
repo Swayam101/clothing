@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { X, CreditCard, Shield, Loader2 } from 'lucide-react';
 import { useModal } from '@/hooks/useModal';
 
@@ -50,47 +50,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     }
   }, [isOpen]);
 
-  // Load Cashfree SDK
-  useEffect(() => {
-    if (isOpen && !sdkLoaded) {
-      const loadCashfreeSDK = () => {
-        return new Promise<void>((resolve, reject) => {
-          if (window.Cashfree) {
-            setSdkLoaded(true);
-            resolve();
-            return;
-          }
-
-          const script = document.createElement('script');
-          script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
-          script.async = true;
-          script.onload = () => {
-            setSdkLoaded(true);
-            resolve();
-          };
-          script.onerror = () => {
-            console.error('Failed to load Cashfree SDK');
-            reject(new Error('Failed to load Cashfree SDK'));
-          };
-          document.head.appendChild(script);
-        });
-      };
-
-      loadCashfreeSDK().catch((error) => {
-        console.error('Cashfree SDK loading error:', error);
-        onPaymentFailure?.(error);
-      });
-    }
-  }, [isOpen, sdkLoaded, onPaymentFailure]);
-
-  // Initialize payment when modal opens and SDK is loaded
-  useEffect(() => {
-    if (isOpen && sdkLoaded && !paymentInitiated) {
-      initiatePayment();
-    }
-  }, [isOpen, sdkLoaded, paymentInitiated]);
-
-  const initiatePayment = async () => {
+  const initiatePayment = useCallback(async () => {
     if (!window.Cashfree) {
       console.error('Cashfree SDK not loaded');
       onPaymentFailure?.(new Error('Payment SDK not available'));
@@ -144,7 +104,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       setPaymentInitiated(false);
       onPaymentFailure?.(error);
     }
-  };
+  }, [paymentSession.payment_session_id, orderId, onPaymentFailure]);
 
   if (!isOpen) return null;
 

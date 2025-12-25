@@ -25,7 +25,7 @@ const OrderFailure: React.FC<OrderFailureProps> = ({
             <XCircle className="w-10 h-10 text-red-600" />
           </div>
           <h1 className="text-2xl font-medium text-gray-900 mb-2">Payment Failed</h1>
-          <p className="text-gray-600">We couldn't process your payment</p>
+          <p className="text-gray-600">{"We couldn't process your payment"}</p>
         </div>
 
         {/* Error Details */}

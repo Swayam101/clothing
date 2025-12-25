@@ -36,7 +36,7 @@ const OrderSuccess: React.FC<OrderSuccessProps> = ({
 
         {/* Process Steps */}
         <div className="space-y-4 mb-8">
-          <h3 className="text-sm font-medium text-gray-900 text-center">What's Next?</h3>
+          <h3 className="text-sm font-medium text-gray-900 text-center">{"What's Next?"}</h3>
 
           <div className="space-y-3">
             <div className="flex items-center gap-3">
@@ -45,7 +45,7 @@ const OrderSuccess: React.FC<OrderSuccessProps> = ({
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-900">Order Processing</p>
-                <p className="text-xs text-gray-600">We'll prepare your item within 1-2 business days</p>
+                <p className="text-xs text-gray-600">{"We'll prepare your item within 1-2 business days"}</p>
               </div>
             </div>
 
@@ -65,7 +65,7 @@ const OrderSuccess: React.FC<OrderSuccessProps> = ({
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-600">Delivery</p>
-                <p className="text-xs text-gray-500">You'll receive tracking updates via WhatsApp</p>
+                <p className="text-xs text-gray-500">{"You'll receive tracking updates via WhatsApp"}</p>
               </div>
             </div>
           </div>
