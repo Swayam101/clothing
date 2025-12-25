@@ -47,6 +47,15 @@ const OrderButtons: React.FC<OrderButtonsProps> = ({
 
   const handleOrderSubmit = async (orderFormData: any) => {
     try {
+      console.log('🔍 OrderButtons - Creating order with data:', {
+        items: [productId],
+        deliveryAddress: orderFormData.deliveryAddress,
+        billingAddress: orderFormData.deliveryAddress,
+        phone: orderFormData.phone,
+        paymentMethod: 'cashfree',
+        customerNotes: `Size: ${selectedSize}`,
+      });
+
       const result = await createOrderMutation.mutateAsync({
         items: [productId], // Server expects array of product ID strings
         deliveryAddress: orderFormData.deliveryAddress, // Server expects deliveryAddress
@@ -56,7 +65,23 @@ const OrderButtons: React.FC<OrderButtonsProps> = ({
         customerNotes: `Size: ${selectedSize}`,
       });
 
+      console.log('✅ OrderButtons - Order creation result:', result);
+      console.log('🔍 OrderButtons - Full result data:', JSON.stringify(result, null, 2));
+      console.log('🔍 OrderButtons - Payment session details:', {
+        paymentSession: result.data?.paymentSession,
+        paymentSessionId: result.data?.paymentSession?.payment_session_id,
+        paymentSessionType: typeof result.data?.paymentSession?.payment_session_id,
+        paymentSessionLength: result.data?.paymentSession?.payment_session_id?.length,
+      });
+
       if (result.success) {
+        console.log('✅ OrderButtons - Setting order data for payment modal:', {
+          orderData: result.data,
+          paymentSession: result.data?.paymentSession,
+          orderId: result.data?.orderId,
+          totalAmount: result.data?.totalAmount,
+        });
+
         setOrderData(result.data);
         setShowOrderModal(false);
         setShowPaymentModal(true);
@@ -64,7 +89,13 @@ const OrderButtons: React.FC<OrderButtonsProps> = ({
         throw new Error(result.message || 'Failed to create order');
       }
     } catch (error: any) {
-      console.error('Order creation error:', error);
+      console.error('❌ OrderButtons - Order creation error:', error);
+      console.error('❌ OrderButtons - Error details:', {
+        error,
+        errorMessage: error?.message,
+        errorResponse: error?.response?.data,
+        errorStatus: error?.response?.status,
+      });
       alert(error.message || 'Failed to create order. Please try again.');
     }
   };
@@ -138,15 +169,33 @@ const OrderButtons: React.FC<OrderButtonsProps> = ({
 
       {/* Payment Modal */}
       {orderData && (
-        <PaymentModal
+        <>
+          {console.log('🔍 OrderButtons - Rendering PaymentModal with props:', {
+            paymentSession: orderData.paymentSession,
+            paymentSessionId: orderData.paymentSession?.payment_session_id,
+            orderId: orderData.orderId,
+            totalAmount: orderData.totalAmount,
+            showPaymentModal,
+          })}
+          <PaymentModal
           isOpen={showPaymentModal}
-          onClose={() => setShowPaymentModal(false)}
+          onClose={() => {
+            console.log('🔍 OrderButtons - Payment modal closed');
+            setShowPaymentModal(false);
+          }}
           paymentSession={orderData.paymentSession}
           orderId={orderData.orderId}
           totalAmount={orderData.totalAmount}
-          onPaymentSuccess={handlePaymentSuccess}
-          onPaymentFailure={handlePaymentFailure}
+          onPaymentSuccess={(orderId) => {
+            console.log('✅ OrderButtons - Payment success for order:', orderId);
+            handlePaymentSuccess(orderId);
+          }}
+          onPaymentFailure={(error) => {
+            console.log('❌ OrderButtons - Payment failure:', error);
+            handlePaymentFailure(error);
+          }}
         />
+        </>
       )}
     </>
   );
