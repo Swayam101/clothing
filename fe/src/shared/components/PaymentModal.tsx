@@ -95,7 +95,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
           const script = document.createElement('script');
           script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
           script.async = true;
-          script.crossOrigin = 'anonymous';
+          // Remove crossOrigin to avoid CORS preflight issues
+          // script.crossOrigin = 'anonymous';
 
           script.onload = () => {
             console.log('✅ PaymentModal - Cashfree SDK loaded successfully');
