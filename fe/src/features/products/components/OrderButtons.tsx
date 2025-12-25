@@ -177,24 +177,35 @@ const OrderButtons: React.FC<OrderButtonsProps> = ({
             totalAmount: orderData.totalAmount,
             showPaymentModal,
           })}
-          <PaymentModal
-          isOpen={showPaymentModal}
-          onClose={() => {
-            console.log('🔍 OrderButtons - Payment modal closed');
-            setShowPaymentModal(false);
-          }}
-          paymentSession={orderData.paymentSession}
-          orderId={orderData.orderId}
-          totalAmount={orderData.totalAmount}
+          {(() => {
+            const paymentOrderId = orderData.cashfreeOrderId || orderData.orderId;
+            console.log('🔍 OrderButtons - PaymentModal orderId resolution:', {
+              frontendOrderId: orderData.orderId,
+              cashfreeOrderId: orderData.cashfreeOrderId,
+              resolvedOrderId: paymentOrderId,
+              paymentSession: orderData.paymentSession
+            });
+            return (
+              <PaymentModal
+                isOpen={showPaymentModal}
+                onClose={() => {
+                  console.log('🔍 OrderButtons - Payment modal closed');
+                  setShowPaymentModal(false);
+                }}
+                paymentSession={orderData.paymentSession}
+                orderId={paymentOrderId}
+                totalAmount={orderData.totalAmount}
           onPaymentSuccess={(orderId) => {
             console.log('✅ OrderButtons - Payment success for order:', orderId);
             handlePaymentSuccess(orderId);
           }}
-          onPaymentFailure={(error) => {
-            console.log('❌ OrderButtons - Payment failure:', error);
-            handlePaymentFailure(error);
-          }}
-        />
+                onPaymentFailure={(error) => {
+                  console.log('❌ OrderButtons - Payment failure:', error);
+                  handlePaymentFailure(error);
+                }}
+              />
+            );
+          })()}
         </>
       )}
     </>

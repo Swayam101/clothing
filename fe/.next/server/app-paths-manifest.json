@@ -11,6 +11,6 @@
   "/privacy/page": "app/privacy/page.js",
   "/products/[slug]/page": "app/products/[slug]/page.js",
   "/products/page": "app/products/page.js",
-  "/size-guide/page": "app/size-guide/page.js",
-  "/terms/page": "app/terms/page.js"
+  "/terms/page": "app/terms/page.js",
+  "/size-guide/page": "app/size-guide/page.js"
 }

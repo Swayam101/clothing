@@ -145,6 +145,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       paymentSessionId: paymentSession?.payment_session_id,
       paymentSessionType: typeof paymentSession?.payment_session_id,
       paymentSessionLength: paymentSession?.payment_session_id?.length,
+      fullPaymentSessionId: paymentSession?.payment_session_id, // Log full ID without truncation
+      paymentSessionEndsWith: paymentSession?.payment_session_id?.slice(-20), // Last 20 chars
       orderId,
       totalAmount,
       environment: process.env.NODE_ENV,

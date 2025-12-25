@@ -27,9 +27,9 @@ const cashfreeWebhook = asyncWrapper(async (req: AuthRequest, res: Response): Pr
 
     logger.info(`Payment successful for order: ${order_id}`);
 
-    // Find the order by cashfreeOrderId
+    // Find the order by cashfreeOrderId (order_id from webhook is Cashfree's order ID)
     const Order = require('../../models/Order').default;
-    const order = await Order.findOne({ orderId: order_id });
+    const order = await Order.findOne({ cashfreeOrderId: order_id });
 
     if (!order) {
       logger.error(`Order not found: ${order_id}`);
@@ -65,9 +65,9 @@ const cashfreeWebhook = asyncWrapper(async (req: AuthRequest, res: Response): Pr
 
     logger.warn(`Payment failed for order: ${order_id}`);
 
-    // Find the order
+    // Find the order by cashfreeOrderId (order_id from webhook is Cashfree's order ID)
     const Order = require('../../models/Order').default;
-    const order = await Order.findOne({ orderId: order_id });
+    const order = await Order.findOne({ cashfreeOrderId: order_id });
 
     if (order) {
       // Update payment status to failed
@@ -84,7 +84,7 @@ const cashfreeWebhook = asyncWrapper(async (req: AuthRequest, res: Response): Pr
 
     // Optionally update order status
     const Order = require('../../models/Order').default;
-    const order = await Order.findOne({ orderId: order_id });
+    const order = await Order.findOne({ cashfreeOrderId: order_id });
 
     if (order) {
       order.status = 'cancelled';
