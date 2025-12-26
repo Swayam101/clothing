@@ -91,8 +91,8 @@ export interface OrderVerificationResponse {
   success: boolean;
   data: {
     orderId: string;
-    paymentStatus: Order['paymentStatus'];
-    orderStatus: Order['status'];
+    order_status: Order['status'];
+    payment_status: Order['paymentStatus'];
     totalAmount: number;
   };
 }

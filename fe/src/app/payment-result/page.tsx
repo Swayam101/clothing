@@ -23,7 +23,7 @@ const PaymentResultContent: React.FC = () => {
     }
 
     if (verificationData?.success) {
-      if (verificationData.data.paymentStatus === 'paid') {
+      if (verificationData.data.payment_status === 'paid') {
         // Payment successful, redirect after delay
         setTimeout(() => {
           router.push(`/order-success?order_id=${orderId}`);
@@ -45,8 +45,8 @@ const PaymentResultContent: React.FC = () => {
   // Determine status based on hook state
   const getStatus = () => {
     if (isLoading) return 'loading';
-    if (verificationData?.success && verificationData.data.paymentStatus === 'paid') return 'success';
-    if (error || (verificationData?.success && verificationData.data.paymentStatus !== 'paid')) return 'failure';
+    if (verificationData?.success && verificationData.data.payment_status === 'paid') return 'success';
+    if (error || (verificationData?.success && verificationData.data.payment_status !== 'paid')) return 'failure';
     return 'loading';
   };
 
