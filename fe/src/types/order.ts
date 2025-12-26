@@ -36,7 +36,7 @@ export interface Order {
   shippingAddress: Address;
   billingAddress: Address;
   paymentMethod: string;
-  paymentStatus: 'pending' | 'paid' | 'failed' | 'refunded';
+  paymentStatus: 'pending' | 'PAID' | 'failed' | 'refunded';
   cashfreeOrderId?: string;
   paymentSessionId?: string;
   status: 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled' | 'returned';
@@ -73,13 +73,12 @@ export interface OrdersResponse {
   success: boolean;
   data: {
     orders: Order[];
-    pagination: {
-      total: number;
-      page: number;
-      limit: number;
-      totalPages: number;
-    };
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
   };
+  message: string;
 }
 
 export interface OrderResponse {

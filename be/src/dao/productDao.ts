@@ -134,11 +134,11 @@ export const deleteProduct = async (productId: string): Promise<IProductDocument
 
 export const updateProductStock = async (
   productId: string,
-  newStock: number
+  inStock: boolean
 ): Promise<IProductDocument | null> => {
   return await Product.findByIdAndUpdate(
     productId,
-    { $set: { instock: newStock } },
+    { $set: { instock: inStock } },
     { new: true, runValidators: true }
   );
 };

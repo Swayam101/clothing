@@ -88,13 +88,20 @@ export const THIRD_PARTY_SERVICES = {
 // ============================================
 // NAVIGATION LINKS
 // ============================================
+interface NavLink {
+  name: string;
+  path: string;
+  authRequired?: boolean;
+}
+
 export const NAVIGATION = {
   mainNav: [
     { name: 'SHOP', path: '/products' },
+    { name: 'ORDERS', path: '/orders', authRequired: true },
     { name: 'SIZE GUIDE', path: '/size-guide' },
     { name: 'ABOUT', path: '/about' },
     { name: 'CONTACT', path: '/contact' },
-  ],
+  ] as NavLink[],
   legalLinks: [
     { name: 'Privacy Policy', href: '/privacy' },
     { name: 'Terms & Conditions', href: '/terms' },

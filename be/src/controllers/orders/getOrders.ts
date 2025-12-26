@@ -30,6 +30,7 @@ const getOrders = asyncWrapper(async (req: AuthRequest, res: Response): Promise<
     if (!isNaN(limit) && limit > 0 && limit <= 50) {
       query.limit = limit;
     }
+
   }
 
   if (req.query.startDate && typeof req.query.startDate === 'string') {
@@ -45,3 +46,4 @@ const getOrders = asyncWrapper(async (req: AuthRequest, res: Response): Promise<
 });
 
 export default getOrders;
+

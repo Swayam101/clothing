@@ -1,5 +1,5 @@
 import Order, { IOrderDocument, OrderItem } from '../models/Order';
-import { Types } from 'mongoose';
+import { FilterQuery, Types } from 'mongoose';
 
 export interface OrderQuery {
   user?: string;
@@ -66,7 +66,7 @@ export const findOrderByOrderId = async (orderId: string): Promise<IOrderDocumen
 export const findOrdersByUser = async (userId: Types.ObjectId, query: OrderQuery = {}): Promise<IOrderDocument[]> => {
   const { status, paymentStatus, page = 1, limit = 10, startDate, endDate } = query;
 
-  const filter: any = { user: userId };
+  const filter: FilterQuery<IOrderDocument> = { user: userId };
 
   if (status) {
     filter.status = status;
@@ -81,6 +81,8 @@ export const findOrdersByUser = async (userId: Types.ObjectId, query: OrderQuery
     if (startDate) filter.createdAt.$gte = startDate;
     if (endDate) filter.createdAt.$lte = endDate;
   }
+
+  filter.paymentStatus='paid';
 
   const skip = (page - 1) * limit;
 

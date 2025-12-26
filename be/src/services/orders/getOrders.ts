@@ -23,6 +23,7 @@ const getOrders = async (
 
   const total = await countOrders({
     user: userId,
+    paymentStatus: 'paid',
     ...queryWithDates,
   });
 

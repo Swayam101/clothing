@@ -17,7 +17,9 @@ const Header: React.FC = () => {
   const { signOut } = useFirebaseAuth();
   const router = useRouter();
 
-  const navLinks = NAVIGATION.mainNav;
+  const navLinks = NAVIGATION.mainNav.filter(link =>
+    !link.authRequired || isAuthenticated
+  );
 
   const handleLogout = async () => {
     const result = await signOut();

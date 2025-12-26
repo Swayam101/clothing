@@ -21,6 +21,8 @@ export const getMyOrders = async (params?: {
   status?: string;
   paymentStatus?: string;
 }): Promise<OrdersResponse> => {
+  console.log('🌐 API Service - getMyOrders called with params:', params);
+  
   const queryParams: Record<string, any> = {};
 
   if (params?.page) queryParams.page = params.page;
@@ -28,7 +30,18 @@ export const getMyOrders = async (params?: {
   if (params?.status) queryParams.status = params.status;
   if (params?.paymentStatus) queryParams.paymentStatus = params.paymentStatus;
 
+  console.log('🌐 API Service - Built query params:', queryParams);
+  console.log('🌐 API Service - API endpoint:', API_ENDPOINTS.ORDERS.MY_ORDERS);
+
   const response = await apiClient.get(API_ENDPOINTS.ORDERS.MY_ORDERS, { params: queryParams });
+  
+  console.log('✅ API Service - Response received:', {
+    status: response.status,
+    hasData: !!response.data,
+    dataKeys: response.data ? Object.keys(response.data) : null,
+    responseData: response.data,
+  });
+  
   return response.data;
 };
 

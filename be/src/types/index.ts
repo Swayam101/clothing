@@ -122,7 +122,7 @@ export interface ProductResponse {
 }
 
 export interface UpdateStockRequest {
-  instock: number;
+  instock: boolean;
 }
 
 // Order types

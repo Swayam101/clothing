@@ -11,7 +11,7 @@ const updateStock = asyncWrapper(async (req: AuthRequest, res: Response): Promis
     return jsonResponse(res, 400, false, undefined, 'Product ID is required');
   }
 
-  if (stockData.instock === undefined || stockData.instock < 0) {
+  if (stockData.instock === undefined) {
     return jsonResponse(res, 400, false, undefined, 'Valid stock quantity is required');
   }
 
