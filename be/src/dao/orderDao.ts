@@ -59,7 +59,8 @@ export const findOrderById = async (orderId: string): Promise<IOrderDocument | n
 };
 
 export const findOrderByOrderId = async (orderId: string): Promise<IOrderDocument | null> => {
-  return await Order.findOne({ orderId }).populate('user', 'email').populate('items.product');
+  console.log('orderId', orderId);
+  return await Order.findOne({ cashfreeOrderId: orderId }).populate('user', 'email').populate('items.product');
 };
 
 export const findOrdersByUser = async (userId: Types.ObjectId, query: OrderQuery = {}): Promise<IOrderDocument[]> => {

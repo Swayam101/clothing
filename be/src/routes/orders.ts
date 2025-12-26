@@ -23,7 +23,7 @@ const router = Router();
 
 // Validation schema for order verification
 const orderIdVerifySchema = yup.object({
-  orderId: yup.string().required('Order ID is required').trim(),
+  order_id: yup.string().required('Order ID is required').trim(),
 });
 
 // All order routes require authentication
@@ -32,7 +32,7 @@ router.use(authenticate);
 // User routes - SIMPLIFIED!
 router.post('/', validate(createOrderSchema), createOrder); // Create order - ONLY needs product IDs!
 router.get('/', validate(getOrdersQuerySchema, 'query'), getOrders); // Get user's orders
-router.get('/verify/:orderId', validate(orderIdVerifySchema, 'params'), verifyOrder); // Verify payment
+router.get('/verify/:order_id', validate(orderIdVerifySchema, 'params'), verifyOrder); // Verify payment
 router.get('/:id', validate(orderIdParamSchema, 'params'), getOrderById); // Get specific order
 
 // Admin routes - admins can manage all orders

@@ -204,7 +204,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       console.log('🔍 PaymentModal - Initializing Cashfree with mode:', cashfreeMode);
 
       const cashfree = window.Cashfree({
-        mode: cashfreeMode
+        mode: 'sandbox'
       });
 
       console.log('✅ PaymentModal - Cashfree instance created:', !!cashfree);
