@@ -27,7 +27,7 @@ const verifyOrder = asyncWrapper(async (req: AuthRequest, res: Response): Promis
     order_id: orderId, // Our internal order ID
     cashfree_order_id: cashfreeOrderId,
     order_status: response.order_status,
-    payment_status: order.paymentStatus,
+    payment_status: response.order_status,
     order_details: order,
     cashfree_details: response
   }, undefined, 'Order verification successful');
