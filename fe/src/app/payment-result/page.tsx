@@ -23,8 +23,6 @@ const PaymentResultContent: React.FC = () => {
     }
 
     if (verificationData?.success) {
-      console.log("verificaiton data on success page", verificationData);
-      
       if (verificationData.data.payment_status === 'PAID') {
         // Payment successful, redirect after delay
         setTimeout(() => {

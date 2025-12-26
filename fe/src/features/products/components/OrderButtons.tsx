@@ -47,15 +47,6 @@ const OrderButtons: React.FC<OrderButtonsProps> = ({
 
   const handleOrderSubmit = async (orderFormData: any) => {
     try {
-      console.log('🔍 OrderButtons - Creating order with data:', {
-        items: [productId],
-        deliveryAddress: orderFormData.deliveryAddress,
-        billingAddress: orderFormData.deliveryAddress,
-        phone: orderFormData.phone,
-        paymentMethod: 'cashfree',
-        customerNotes: `Size: ${selectedSize}`,
-      });
-
       const result = await createOrderMutation.mutateAsync({
         items: [productId], // Server expects array of product ID strings
         deliveryAddress: orderFormData.deliveryAddress, // Server expects deliveryAddress
@@ -65,22 +56,7 @@ const OrderButtons: React.FC<OrderButtonsProps> = ({
         customerNotes: `Size: ${selectedSize}`,
       });
 
-      console.log('✅ OrderButtons - Order creation result:', result);
-      console.log('🔍 OrderButtons - Full result data:', JSON.stringify(result, null, 2));
-      console.log('🔍 OrderButtons - Payment session details:', {
-        paymentSession: result.data?.paymentSession,
-        paymentSessionId: result.data?.paymentSession?.payment_session_id,
-        paymentSessionType: typeof result.data?.paymentSession?.payment_session_id,
-        paymentSessionLength: result.data?.paymentSession?.payment_session_id?.length,
-      });
-
       if (result.success) {
-        console.log('✅ OrderButtons - Setting order data for payment modal:', {
-          orderData: result.data,
-          paymentSession: result.data?.paymentSession,
-          orderId: result.data?.orderId,
-          totalAmount: result.data?.totalAmount,
-        });
 
         setOrderData(result.data);
         setShowOrderModal(false);
@@ -112,18 +88,18 @@ const OrderButtons: React.FC<OrderButtonsProps> = ({
   };
 
   if (isOutOfStock) {
-    return (
-      <div className="space-y-4">
-        <button
+  return (
+    <div className="space-y-4">
+      <button
           disabled
           className="w-full py-4 bg-gray-200 text-gray-400 cursor-not-allowed text-sm tracking-wide rounded-none"
         >
           OUT OF STOCK
-        </button>
-        <p className="text-xs text-center text-gray-500">
+      </button>
+      <p className="text-xs text-center text-gray-500">
           This item is currently out of stock
-        </p>
-      </div>
+      </p>
+    </div>
     );
   }
 
@@ -169,44 +145,15 @@ const OrderButtons: React.FC<OrderButtonsProps> = ({
 
       {/* Payment Modal */}
       {orderData && (
-        <>
-          {console.log('🔍 OrderButtons - Rendering PaymentModal with props:', {
-            paymentSession: orderData.paymentSession,
-            paymentSessionId: orderData.paymentSession?.payment_session_id,
-            orderId: orderData.orderId,
-            totalAmount: orderData.totalAmount,
-            showPaymentModal,
-          })}
-          {(() => {
-            const paymentOrderId = orderData.cashfreeOrderId || orderData.orderId;
-            console.log('🔍 OrderButtons - PaymentModal orderId resolution:', {
-              frontendOrderId: orderData.orderId,
-              cashfreeOrderId: orderData.cashfreeOrderId,
-              resolvedOrderId: paymentOrderId,
-              paymentSession: orderData.paymentSession
-            });
-            return (
-              <PaymentModal
-                isOpen={showPaymentModal}
-                onClose={() => {
-                  console.log('🔍 OrderButtons - Payment modal closed');
-                  setShowPaymentModal(false);
-                }}
-                paymentSession={orderData.paymentSession}
-                orderId={paymentOrderId}
-                totalAmount={orderData.totalAmount}
-          onPaymentSuccess={(orderId) => {
-            console.log('✅ OrderButtons - Payment success for order:', orderId);
-            handlePaymentSuccess(orderId);
-          }}
-                onPaymentFailure={(error) => {
-                  console.log('❌ OrderButtons - Payment failure:', error);
-                  handlePaymentFailure(error);
-                }}
-              />
-            );
-          })()}
-        </>
+        <PaymentModal
+          isOpen={showPaymentModal}
+          onClose={() => setShowPaymentModal(false)}
+          paymentSession={orderData.paymentSession}
+          orderId={orderData.cashfreeOrderId || orderData.orderId}
+          totalAmount={orderData.totalAmount}
+          onPaymentSuccess={handlePaymentSuccess}
+          onPaymentFailure={handlePaymentFailure}
+        />
       )}
     </>
   );

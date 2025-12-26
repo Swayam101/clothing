@@ -16,24 +16,9 @@ const Pagination: React.FC<PaginationProps> = ({
 }) => {
   const [hoveredPage, setHoveredPage] = useState<number | null>(null);
   
-  console.log('📊 Pagination - Component render:', {
-    currentPage,
-    totalPages,
-    className,
-    shouldRender: totalPages > 1,
-  });
-  
-  if (totalPages <= 1) {
-    console.log('⏸️ Pagination - Not rendering, totalPages <= 1:', totalPages);
-    return null;
-  }
+  if (totalPages <= 1) return null;
 
   const handlePrevious = () => {
-    console.log('⬅️ Pagination - Previous clicked:', {
-      currentPage,
-      canGoPrevious: currentPage > 1,
-      targetPage: currentPage - 1,
-    });
     if (currentPage > 1) {
       onPageChange(currentPage - 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -41,12 +26,6 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   const handleNext = () => {
-    console.log('➡️ Pagination - Next clicked:', {
-      currentPage,
-      totalPages,
-      canGoNext: currentPage < totalPages,
-      targetPage: currentPage + 1,
-    });
     if (currentPage < totalPages) {
       onPageChange(currentPage + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -54,11 +33,6 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   const handlePageClick = (page: number) => {
-    console.log('🔢 Pagination - Page clicked:', {
-      currentPage,
-      clickedPage: page,
-      isDifferent: page !== currentPage,
-    });
     onPageChange(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -99,12 +73,6 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   const pageNumbers = getPageNumbers();
-
-  console.log('📄 Pagination - Page numbers generated:', {
-    pageNumbers,
-    totalPages,
-    currentPage,
-  });
 
   return (
     <div className={`flex items-center justify-center gap-2 ${className}`}>

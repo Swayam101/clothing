@@ -32,19 +32,9 @@ const OrdersContent: React.FC = () => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
 
-  console.log('🔍 OrdersContent - Component render:', {
-    currentPage,
-    isAuthenticated,
-    hasUser: !!user,
-    userId: user?.id,
-    userEmail: user?.email,
-    hasHydrated: _hasHydrated,
-  });
-
   // Redirect if not authenticated (only after hydration completes)
   useEffect(() => {
     if (_hasHydrated && !isAuthenticated) {
-      console.log('❌ OrdersContent - Not authenticated after hydration, redirecting to login');
       router.push('/login?redirect=/orders');
     }
   }, [_hasHydrated, isAuthenticated, router]);
@@ -55,39 +45,17 @@ const OrdersContent: React.FC = () => {
     limit: 10,
   };
 
-  console.log('🔍 OrdersContent - Query params:', queryParams);
-
   // Fetch orders
   const { data, isLoading, error } = useMyOrders(queryParams, !!user);
 
-  console.log('🔍 OrdersContent - API state:', {
-    isLoading,
-    hasError: !!error,
-    error: error,
-    hasData: !!data,
-    dataKeys: data ? Object.keys(data) : null,
-  });
-
-  // Log raw API response
-  useEffect(() => {
-    if (data) {
-      console.log('✅ OrdersContent - Raw API response:', JSON.stringify(data, null, 2));
-    }
-  }, [data]);
-
   // Handle page changes
   const handlePageChange = (page: number) => {
-    console.log('📄 OrdersContent - Page change requested:', {
-      fromPage: currentPage,
-      toPage: page,
-    });
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Show loading while hydrating
   if (!_hasHydrated) {
-    console.log('⏸️ OrdersContent - Waiting for hydration...');
     return (
       <div className="min-h-screen flex items-center justify-center">
         <LoadingSpinner message="Loading..." />
@@ -97,7 +65,6 @@ const OrdersContent: React.FC = () => {
 
   // Don't render anything if not authenticated (will redirect)
   if (!isAuthenticated) {
-    console.log('⏸️ OrdersContent - Not rendering, not authenticated');
     return null;
   }
 
@@ -107,19 +74,6 @@ const OrdersContent: React.FC = () => {
     totalPages: data.data.totalPages,
     totalOrders: data.data.total,
   } : null;
-
-  console.log('🔍 OrdersContent - Extracted data:', {
-    ordersCount: orders.length,
-    pagination: pagination,
-    rawDataStructure: data?.data ? {
-      hasOrders: !!data.data.orders,
-      ordersLength: data.data.orders?.length,
-      page: data.data.page,
-      totalPages: data.data.totalPages,
-      total: data.data.total,
-      limit: data.data.limit,
-    } : null,
-  });
 
   return (
     <Section className="mb-16">
@@ -153,20 +107,12 @@ const OrdersContent: React.FC = () => {
             </div>
 
             {pagination && pagination.totalPages > 1 && (
-              <>
-                {console.log('📊 OrdersContent - Rendering Pagination component:', {
-                  currentPage: pagination.currentPage,
-                  totalPages: pagination.totalPages,
-                  totalOrders: pagination.totalOrders,
-                  shouldRender: pagination.totalPages > 1,
-                })}
-                <Pagination
-                  currentPage={pagination.currentPage}
-                  totalPages={pagination.totalPages}
-                  onPageChange={handlePageChange}
-                  className="mt-8 sm:mt-10 lg:mt-12"
-                />
-              </>
+              <Pagination
+                currentPage={pagination.currentPage}
+                totalPages={pagination.totalPages}
+                onPageChange={handlePageChange}
+                className="mt-8 sm:mt-10 lg:mt-12"
+              />
             )}
           </>
         )}

@@ -32,8 +32,6 @@ export const useNewsletterStore = create<NewsletterState>((set, get) => ({
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // In production, you'd make an actual API call here
-    console.log('Newsletter subscription:', email);
-
     set({ isSubscribed: true, isLoading: false, email: '' });
 
     // Reset after 3 seconds

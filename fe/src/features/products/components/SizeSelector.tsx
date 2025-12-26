@@ -22,7 +22,7 @@ const SizeSelector: React.FC<SizeSelectorProps> = ({ size }) => {
       </div>
       <div className="flex items-center gap-3">
         <Badge variant="outline" size="lg">
-          {size}
+            {size}
         </Badge>
       </div>
     </div>

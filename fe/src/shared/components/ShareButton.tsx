@@ -119,20 +119,20 @@ const ShareButton: React.FC<ShareButtonProps> = ({
               className="bg-white w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden"
             >
               <div className="p-6">
-                {/* Header */}
+              {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                   <h3 id="share-modal-title" className="text-lg font-medium text-gray-900">
                     Share this piece
                   </h3>
-                  <button
+                <button
                     ref={initialFocusRef}
-                    onClick={() => setShowShareModal(false)}
+                  onClick={() => setShowShareModal(false)}
                     className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                     aria-label="Close share modal"
-                  >
-                    <X className="w-5 h-5 text-gray-500" />
-                  </button>
-                </div>
+                >
+                  <X className="w-5 h-5 text-gray-500" />
+                </button>
+              </div>
 
               {/* Product Preview */}
               <div className="flex items-center gap-4 mb-6 p-4 bg-gray-50 rounded-xl">
