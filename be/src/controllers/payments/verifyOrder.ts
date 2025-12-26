@@ -5,7 +5,7 @@ import { cashfreeService } from '../../services/payments/cashfreeService';
 import { findOrderByOrderId } from '../../dao';
 
 const verifyOrder = asyncWrapper(async (req: AuthRequest, res: Response): Promise<void> => {
-  const { orderId } = req.params;
+  const { order_id: orderId } = req.params;
 
   if (!orderId) {
     return jsonResponse(res, 400, false, undefined, 'Order ID is required');

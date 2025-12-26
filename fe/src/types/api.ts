@@ -7,7 +7,7 @@ export interface Product {
   color: string;
   condition: string;
   price: number;
-  instock: number;
+  instock: boolean;
   fabric: string;
   description: string;
   style: string;

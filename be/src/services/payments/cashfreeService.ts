@@ -66,7 +66,8 @@ class CashfreeService {
       });
 
       logger.info(`Cashfree order created: ${orderRequest.order_id}`);
-
+      console.log(response.data);
+      
       return response.data;
     } catch (error: any) {
       logger.error('Cashfree create order error:', error.response?.data || error.message);

@@ -113,7 +113,7 @@ export default function ProductDetailPage() {
                 productId={product._id}
                 productName={product.title}
                 productPrice={product.price}
-                isOutOfStock={product.instock === 0}
+                isOutOfStock={!product.instock}
               />
 
               <TrustSignals />

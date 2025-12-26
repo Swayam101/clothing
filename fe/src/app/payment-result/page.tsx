@@ -1,11 +1,11 @@
 'use client';
 
-import React, { Suspense } from 'react';
+import React, { Suspense,useEffect } from 'react';
 import { Loader2, CheckCircle, XCircle } from 'lucide-react';
+import { useRouter,useSearchParams  } from 'next/navigation';
 import { useVerifyOrder } from '@/api/hooks/useOrders';
 
 const PaymentResultContent: React.FC = () => {
-  const { useRouter, useSearchParams, useEffect } = require('next/navigation');
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get('order_id') || '';

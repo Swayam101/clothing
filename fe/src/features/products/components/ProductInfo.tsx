@@ -3,7 +3,7 @@
 import React from 'react';
 import Badge from '@/shared/components/ui/Badge';
 import ShareButton from '@/shared/components/ShareButton';
-import { Heart, Eye, Palette, Star, Shirt, Package } from 'lucide-react';
+import {  Palette, Star, Shirt, Package,StampIcon } from 'lucide-react';
 
 interface ProductInfoProps {
   name: string;
@@ -13,7 +13,7 @@ interface ProductInfoProps {
   condition: string;
   fabric: string;
   style: string;
-  instock: number;
+  instock: boolean;
   featured: boolean;
   size: string;
   slug: string;
@@ -38,10 +38,9 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
   // Share URL for the ShareButton component
   const productUrl = typeof window !== 'undefined' ? `${window.location.origin}/products/${slug}` : '';
 
-  const getStockStatus = (stock: number) => {
-    if (stock === 0) return { text: 'Out of Stock', variant: 'default' as const, color: 'bg-red-600' };
-    if (stock <= 5) return { text: 'Low Stock', variant: 'outline' as const, color: 'bg-orange-500' };
-    return { text: 'In Stock', variant: 'outline' as const, color: 'bg-green-600' };
+  const getStockStatus = (stock: boolean) => {
+    if (!stock) return { text: 'Out of Stock', variant: 'default' as const, color: 'bg-gray-400' };
+    return { text: 'In Stock', variant: 'default' as const, color: 'bg-black-600' };
   };
 
   const stockStatus = getStockStatus(instock);
@@ -112,56 +111,57 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
 
         {/* Style and Status */}
         <div className="space-y-4 pt-2">
-          <div className="flex items-center justify-between">
-            <div className="space-y-3">
+          <div className="flex items-center justify-start lg:gap-8 gap-4">
+            <div className="space-y-3 min-w-36">
               <div className="flex items-center gap-2">
                 <Shirt className="w-4 h-4 text-gray-400" />
                 <span className="text-xs tracking-widest font-medium text-gray-500 uppercase">
                   Style
                 </span>
               </div>
-              <Badge variant="outline" className="capitalize">
+              <Badge variant="outline" className="capitalize w-full justify-center">
                 {style}
               </Badge>
             </div>
             {featured && (
-              <div className="flex flex-col items-end gap-2">
-                <span className="text-xs tracking-widest font-medium text-gray-500 uppercase">
+              <div className="flex flex-col items-start gap-2 min-w-36">
+               <div className="flex items-center gap-2">
+                <StampIcon className="w-4 h-4 text-gray-400" />
+               <span className="text-xs tracking-widest font-medium text-gray-500 uppercase">
                   Status
                 </span>
-                <Badge variant="default" className="bg-gradient-to-r from-gray-800 to-black" icon={<Star className="w-3 h-3" />}>
+                </div>
+                <Badge variant="default" className="bg-gradient-to-r from-gray-800 to-black w-full justify-center" icon={<Star className="w-3 h-3" />}>
                   Featured
                 </Badge>
               </div>
             )}
-          </div>
-
-          {/* Stock Status with Interactive Counter */}
-          <div className="space-y-3 pt-2 border-t border-gray-50">
+            <div className="space-y-3 border-t border-gray-50 min-w-36">
             <div className="flex items-center gap-2">
               <Package className="w-4 h-4 text-gray-400" />
               <span className="text-xs tracking-widest font-medium text-gray-500 uppercase">
                 Availability
               </span>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 w-full justify-center">
               <Badge
                 variant={stockStatus.variant}
                 className={`${
                   stockStatus.variant === 'default'
                     ? stockStatus.color + ' text-white'
                     : 'border-gray-300'
-                }`}
+                } w-full justify-center`}
               >
                 {stockStatus.text}
               </Badge>
-              {instock > 0 && (
-                <span className="text-sm text-gray-500">
-                  {instock} available
-                </span>
-              )}
+              
             </div>
           </div>
+          </div>
+
+
+          {/* Stock Status with Interactive Counter */}
+          
         </div>
       </div>
 
